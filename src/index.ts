@@ -1,18 +1,15 @@
 import { Engine } from "@babylonjs/core/Engines/engine"
 import { Scene } from "@babylonjs/core/scene"
-import {
-  AbstractMesh,
-  ArcRotateCamera,
-  Color3,
-  DirectionalLight, HavokPlugin,
-  HemisphericLight,
-  SceneLoader,
-  ShadowGenerator,
-  ShadowLight,
-  Vector3,
-} from "@babylonjs/core"
 import HavokPhysics from "@babylonjs/havok"
+import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
+import { Color3, Vector3 } from "@babylonjs/core/Maths"
+import { ArcRotateCamera } from "@babylonjs/core/Cameras"
+import { SceneLoader } from "@babylonjs/core/Loading"
+import { AbstractMesh } from "@babylonjs/core/Meshes"
 import { Player } from "./entities/player/player"
+import "@babylonjs/core/Helpers/sceneHelpers"
+import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
+import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
 
 export function main(): void {
   initialiseScene(createCanvas())

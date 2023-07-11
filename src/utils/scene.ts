@@ -1,5 +1,5 @@
-import { AbstractMesh } from "@babylonjs/core"
-import { Scene } from "@babylonjs/core/scene"
+import type { AbstractMesh } from "@babylonjs/core/Meshes"
+import type { Scene } from "@babylonjs/core/scene"
 
 export function getMeshByName<T extends AbstractMesh>(name: string, scene: Scene): T {
   const mesh = scene.getMeshByName(name)

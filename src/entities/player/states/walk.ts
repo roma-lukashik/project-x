@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { Animatable } from "@babylonjs/core"
+import type { Animatable } from "@babylonjs/core/Animations"
 import { State } from "../../../state/state"
 import { KeyboardManager } from "../../../keyboard"
 import { Player } from "../player"
