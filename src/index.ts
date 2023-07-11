@@ -13,7 +13,6 @@ import {
 } from "@babylonjs/core"
 import HavokPhysics from "@babylonjs/havok";
 import { Player } from "./entities/player/player";
-import { PlayerStateController } from "./entities/player/controller";
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -40,9 +39,6 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const player = new Player(scene)
   initialiseShadow(light, player.mesh)
   createCamera(scene)
-
-  const stateController = new PlayerStateController(player, scene)
-  scene.onBeforeRenderObservable.add(() => stateController.update())
 
   engine.runRenderLoop(() => scene.render())
   window.addEventListener("resize", () => engine.resize())
