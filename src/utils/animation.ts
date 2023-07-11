@@ -1,5 +1,5 @@
-import { Scene } from "@babylonjs/core/scene";
-import { Animatable } from "@babylonjs/core";
+import { Scene } from "@babylonjs/core/scene"
+import { Animatable } from "@babylonjs/core"
 
 export function blendAnimations(
   scene: Scene,

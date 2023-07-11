@@ -9,10 +9,10 @@ import {
   SceneLoader,
   ShadowGenerator,
   ShadowLight,
-  Vector3
+  Vector3,
 } from "@babylonjs/core"
-import HavokPhysics from "@babylonjs/havok";
-import { Player } from "./entities/player/player";
+import HavokPhysics from "@babylonjs/havok"
+import { Player } from "./entities/player/player"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -52,7 +52,7 @@ async function createPhysics(scene: Scene) {
 
 function createEnvironment(scene: Scene) {
   const env = scene.createDefaultEnvironment({
-    enableGroundShadow: true
+    enableGroundShadow: true,
   })
   if (!env) {
     throw new Error("Cannot create a scene")

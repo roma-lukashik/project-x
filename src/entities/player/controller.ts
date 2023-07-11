@@ -1,10 +1,10 @@
-import { StateController } from "../../state/controller";
-import { State } from "../../state/state";
-import { Player } from "./player";
-import { Scene } from "@babylonjs/core/scene";
-import { IdleState } from "./states/idle";
-import { WalkState } from "./states/walk";
-import { RunState } from "./states/run";
+import { StateController } from "../../state/controller"
+import { State } from "../../state/state"
+import { Player } from "./player"
+import { Scene } from "@babylonjs/core/scene"
+import { IdleState } from "./states/idle"
+import { WalkState } from "./states/walk"
+import { RunState } from "./states/run"
 
 export class PlayerStateController extends StateController {
   public readonly idleState: State

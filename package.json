@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "webpack-dev-server",
+    "lint": "eslint ./src --ext=ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

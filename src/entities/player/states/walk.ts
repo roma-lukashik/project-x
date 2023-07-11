@@ -1,10 +1,10 @@
-import { Scene } from "@babylonjs/core/scene";
-import { Animatable } from "@babylonjs/core";
-import { State } from "../../../state/state";
-import { KeyboardManager } from "../../../keyboard";
-import { Player } from "../player";
-import { smoothlyCancelAnimation, smoothlyStartAnimation } from "../../../utils/animation";
-import { PlayerStateController } from "../controller";
+import { Scene } from "@babylonjs/core/scene"
+import { Animatable } from "@babylonjs/core"
+import { State } from "../../../state/state"
+import { KeyboardManager } from "../../../keyboard"
+import { Player } from "../player"
+import { smoothlyCancelAnimation, smoothlyStartAnimation } from "../../../utils/animation"
+import { PlayerStateController } from "../controller"
 
 export class WalkState implements State {
   private readonly walkAnimation: Animatable

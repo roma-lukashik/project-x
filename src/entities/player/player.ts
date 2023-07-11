@@ -1,9 +1,9 @@
-import { Animatable, Mesh, PhysicsBody, PhysicsMotionType } from "@babylonjs/core";
-import { Scene } from "@babylonjs/core/scene";
-import { getMeshByName } from "../../utils/scene";
-import { PlayerStateController } from "./controller";
-import { Observer } from "@babylonjs/core/Misc";
-import { Nullable } from "@babylonjs/core/types";
+import { Animatable, Mesh, PhysicsBody, PhysicsMotionType } from "@babylonjs/core"
+import { Scene } from "@babylonjs/core/scene"
+import { getMeshByName } from "../../utils/scene"
+import { PlayerStateController } from "./controller"
+import { Observer } from "@babylonjs/core/Misc"
+import { Nullable } from "@babylonjs/core/types"
 
 export class Player {
   public readonly mesh: Mesh
