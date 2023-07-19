@@ -1,38 +1,35 @@
 import { Scene } from "@babylonjs/core/scene"
-import type { Animatable } from "@babylonjs/core/Animations"
+import { Vector3 } from "@babylonjs/core/Maths";
 import { State } from "../../../state/state"
 import { KeyboardManager } from "../../../keyboard"
 import { Player } from "../player"
-import { smoothlyCancelAnimation, smoothlyStartAnimation } from "../../../utils/animation"
 import { PlayerStateController } from "../controller"
 
 export class IdleState implements State {
-  private readonly idleAnimation: Animatable
-  private readonly keyboard: KeyboardManager
-
   public constructor(
+    // @ts-ignore
     private readonly scene: Scene,
     private readonly player: Player,
   ) {
-    this.idleAnimation = this.player.idle()
-    this.keyboard = new KeyboardManager(this.scene)
   }
 
   public onEnter() {
-    smoothlyStartAnimation(this.scene, this.idleAnimation)
+    this.player.idle()
+    this.player.physicsBody.setLinearVelocity(Vector3.Zero())
   }
 
   public onExit() {
-    smoothlyCancelAnimation(this.scene, this.idleAnimation)
   }
 
   public update(controller: PlayerStateController) {
-    if (this.keyboard.isPressed("W")) {
-      if (this.keyboard.isPressed("Shift")) {
+    if (KeyboardManager.getKey("w")) {
+      if (KeyboardManager.getKey("Shift")) {
         controller.change(controller.runState)
       } else {
         controller.change(controller.walkState)
       }
+    } else if (KeyboardManager.getKey(" ")) {
+      controller.change(controller.jumpState)
     }
   }
 }

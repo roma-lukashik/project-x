@@ -8,8 +8,10 @@ export class StateController {
   }
 
   public change(newState: State): void {
-    this.currentState?.onExit(this)
-    this.currentState = newState
-    this.currentState.onEnter(this)
+    if (this.currentState !== newState) {
+      this.currentState?.onExit(this)
+      this.currentState = newState
+      this.currentState.onEnter(this)
+    }
   }
 }

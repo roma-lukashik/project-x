@@ -13,14 +13,13 @@ export function blendAnimations(
       to.weight += step
     } else {
       from.weight = 0
+      from.stop()
       to.weight = 1
       scene.onBeforeRenderObservable.remove(observer)
     }
   })
   from.weight = 1
   to.weight = 0
-  to.syncWith(null)
-  from.syncWith(to)
   return observer
 }
 

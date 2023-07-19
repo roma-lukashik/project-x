@@ -3,13 +3,14 @@ import { Scene } from "@babylonjs/core/scene"
 import HavokPhysics from "@babylonjs/havok"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
 import { Color3, Vector3 } from "@babylonjs/core/Maths"
-import { ArcRotateCamera } from "@babylonjs/core/Cameras"
+import { FollowCamera } from "@babylonjs/core/Cameras"
 import { SceneLoader } from "@babylonjs/core/Loading"
 import { AbstractMesh } from "@babylonjs/core/Meshes"
 import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
 import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
+import { KeyboardManager } from "./keyboard";
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -27,6 +28,8 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const engine = new Engine(canvas)
   const scene = new Scene(engine)
 
+  KeyboardManager.init(scene)
+
   await createPhysics(scene)
   await loadMeshes(scene)
 
@@ -35,7 +38,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const light = createSunLight(scene)
   const player = new Player(scene)
   initialiseShadow(light, player.mesh)
-  createCamera(scene)
+  createCamera(scene, player.mesh)
 
   engine.runRenderLoop(() => scene.render())
   window.addEventListener("resize", () => engine.resize())
@@ -50,6 +53,7 @@ async function createPhysics(scene: Scene) {
 function createEnvironment(scene: Scene) {
   const env = scene.createDefaultEnvironment({
     enableGroundShadow: true,
+    sizeAuto: true,
   })
   if (!env) {
     throw new Error("Cannot create a scene")
@@ -69,19 +73,16 @@ function createSunLight(scene: Scene) {
   return light
 }
 
-function createCamera(scene: Scene) {
-  const camera = new ArcRotateCamera("camera", Math.PI / 3, Math.PI / 3, 3, Vector3.Up(), scene)
-  camera.lowerRadiusLimit = 2
-  camera.upperRadiusLimit = 10
-  camera.wheelDeltaPercentage = 0.01
+function createCamera(scene: Scene, target: AbstractMesh) {
+  const camera = new FollowCamera("camera", new Vector3(0, 300, 0), scene, target)
+  camera.heightOffset = 400
+  camera.radius = 350
   camera.attachControl(true)
   return camera
 }
 
 async function loadMeshes(scene: Scene) {
-  return new Promise((resolve) => {
-    SceneLoader.ImportMesh("", "/", "dummy3.babylon", scene, resolve)
-  })
+  return SceneLoader.ImportMeshAsync("", "/", "bot.babylon", scene)
 }
 
 function initialiseShadow(light: ShadowLight, mesh: AbstractMesh) {

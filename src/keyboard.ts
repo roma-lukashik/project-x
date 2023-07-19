@@ -1,49 +1,28 @@
 import { Scene } from "@babylonjs/core/scene"
-import { Observer } from "@babylonjs/core/Misc"
-import { KeyboardEventTypes, KeyboardInfo } from "@babylonjs/core/Events/keyboardEvents"
-import { Nullable } from "@babylonjs/core/types"
+import { ActionEvent, ActionManager, ExecuteCodeAction } from "@babylonjs/core/Actions";
 
 export class KeyboardManager {
-  private readonly keyPressed: Set<string> = new Set()
-  private readonly observer: Nullable<Observer<KeyboardInfo>>
+  private static readonly keys: Set<string> = new Set()
 
-  public constructor(private readonly scene: Scene) {
-    this.observer = scene.onKeyboardObservable.add(this.handleKeyboardEvent)
+  public static init(scene: Scene) {
+    scene.actionManager = new ActionManager(scene)
+    scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, KeyboardManager.handleKeyDown))
+    scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, KeyboardManager.handleKeyUp))
   }
 
-  public isPressed(key: string): boolean {
-    return this.keyPressed.has(key)
+  public static getKey(keyName: string): boolean {
+    return KeyboardManager.keys.has(keyName)
   }
 
-  public dispose(): void {
-    this.scene.onKeyboardObservable.remove(this.observer)
-    this.keyPressed.clear()
+  public static dispose(): void {
+    KeyboardManager.keys.clear()
   }
 
-  private handleKeyboardEvent = (kbInfo: KeyboardInfo) => {
-    switch (kbInfo.type) {
-      case KeyboardEventTypes.KEYDOWN:
-        switch (kbInfo.event.key) {
-          case "W":
-          case "w":
-            this.keyPressed.add("W")
-            break
-          case "Shift":
-            this.keyPressed.add("Shift")
-            break
-        }
-        break
-      case KeyboardEventTypes.KEYUP:
-        switch (kbInfo.event.key) {
-          case "W":
-          case "w":
-            this.keyPressed.delete("W")
-            break
-          case "Shift":
-            this.keyPressed.delete("Shift")
-            break
-        }
-        break
-    }
+  private static handleKeyDown = (event: ActionEvent) => {
+    KeyboardManager.keys.add(event.sourceEvent.key)
+  }
+
+  private static handleKeyUp = (event: ActionEvent) => {
+    KeyboardManager.keys.delete(event.sourceEvent.key)
   }
 }
