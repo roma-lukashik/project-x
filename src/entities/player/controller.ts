@@ -5,8 +5,8 @@ import { Scene } from "@babylonjs/core/scene"
 import { IdleState } from "./states/idle"
 import { WalkState } from "./states/walk"
 import { RunState } from "./states/run"
-import { JumpState } from "./states/jump";
-import { JumpInRunState } from "./states/jumpInRun";
+import { JumpState } from "./states/jump"
+import { JumpInRunState } from "./states/jumpInRun"
 
 export class PlayerStateController extends StateController {
   public readonly idleState: State
@@ -25,6 +25,5 @@ export class PlayerStateController extends StateController {
     this.runState = new RunState(scene, player)
     this.jumpState = new JumpState(scene, player)
     this.jumpInRunState = new JumpInRunState(scene, player)
-    this.change(this.idleState)
   }
 }

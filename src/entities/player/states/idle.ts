@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { Vector3 } from "@babylonjs/core/Maths";
+// import { Vector3 } from "@babylonjs/core/Maths";
 import { State } from "../../../state/state"
 import { KeyboardManager } from "../../../keyboard"
 import { Player } from "../player"
@@ -15,7 +15,7 @@ export class IdleState implements State {
 
   public onEnter() {
     this.player.idle()
-    this.player.physicsBody.setLinearVelocity(Vector3.Zero())
+    // this.player.physicsBody.setLinearVelocity(Vector3.Zero())
   }
 
   public onExit() {

@@ -1,58 +1,28 @@
 import type { Scene } from "@babylonjs/core/scene"
-import type { Animatable } from "@babylonjs/core/Animations"
+import type { AnimationGroup } from "@babylonjs/core/Animations"
 
 export function blendAnimations(
   scene: Scene,
-  from: Animatable,
-  to: Animatable,
+  from: AnimationGroup,
+  to: AnimationGroup,
   step = 0.01,
 ) {
+  let fromWeight = 1
+  let toWeight = 0
   const observer = scene.onBeforeRenderObservable.add(() => {
-    if (from.weight > 0) {
-      from.weight -= step
-      to.weight += step
+    if (fromWeight > 0) {
+      fromWeight -= step
+      toWeight += step
+      from.setWeightForAllAnimatables(fromWeight)
+      to.setWeightForAllAnimatables(toWeight)
     } else {
-      from.weight = 0
+      from.setWeightForAllAnimatables(0)
       from.stop()
-      to.weight = 1
+      to.setWeightForAllAnimatables(1)
       scene.onBeforeRenderObservable.remove(observer)
     }
   })
-  from.weight = 1
-  to.weight = 0
-  return observer
-}
-
-export function smoothlyStartAnimation(
-  scene: Scene,
-  animation: Animatable,
-  step = 0.01,
-) {
-  const observer = scene.onBeforeRenderObservable.add(() => {
-    if (animation.weight < 1) {
-      animation.weight += step
-    } else {
-      animation.weight = 1
-      scene.onBeforeRenderObservable.remove(observer)
-    }
-  })
-  animation.weight = 0
-  return observer
-}
-
-export function smoothlyCancelAnimation(
-  scene: Scene,
-  animation: Animatable,
-  step = 0.01,
-) {
-  const observer = scene.onBeforeRenderObservable.add(() => {
-    if (animation.weight > 0) {
-      animation.weight -= step
-    } else {
-      animation.weight = 0
-      scene.onBeforeRenderObservable.remove(observer)
-    }
-  })
-  animation.weight = 1
+  from.play(true)
+  to.play(true)
   return observer
 }

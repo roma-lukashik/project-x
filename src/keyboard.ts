@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { ActionEvent, ActionManager, ExecuteCodeAction } from "@babylonjs/core/Actions";
+import { ActionEvent, ActionManager, ExecuteCodeAction } from "@babylonjs/core/Actions"
 
 export class KeyboardManager {
   private static readonly keys: Set<string> = new Set()

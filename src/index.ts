@@ -4,13 +4,14 @@ import HavokPhysics from "@babylonjs/havok"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
 import { Color3, Vector3 } from "@babylonjs/core/Maths"
 import { FollowCamera } from "@babylonjs/core/Cameras"
-import { SceneLoader } from "@babylonjs/core/Loading"
+import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
 import { AbstractMesh } from "@babylonjs/core/Meshes"
 import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
 import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
-import { KeyboardManager } from "./keyboard";
+import { KeyboardManager } from "./keyboard"
+import "@babylonjs/loaders/glTF/2.0"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -32,6 +33,11 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   await createPhysics(scene)
   await loadMeshes(scene)
+  await loadAnimation(scene, "idle")
+  await loadAnimation(scene, "walk")
+  await loadAnimation(scene, "run")
+  await loadAnimation(scene, "jumpInRun")
+  await loadAnimation(scene, "jumpInPlace")
 
   createEnvironment(scene)
   createAmbientLight(scene)
@@ -53,7 +59,6 @@ async function createPhysics(scene: Scene) {
 function createEnvironment(scene: Scene) {
   const env = scene.createDefaultEnvironment({
     enableGroundShadow: true,
-    sizeAuto: true,
   })
   if (!env) {
     throw new Error("Cannot create a scene")
@@ -69,20 +74,30 @@ function createAmbientLight(scene: Scene) {
 
 function createSunLight(scene: Scene) {
   const light = new DirectionalLight("directionalLight", new Vector3(0, -0.5, -1.0), scene)
-  light.position = new Vector3(0, 5, 5)
+  light.position = new Vector3(0, 500, 5)
   return light
 }
 
 function createCamera(scene: Scene, target: AbstractMesh) {
-  const camera = new FollowCamera("camera", new Vector3(0, 300, 0), scene, target)
-  camera.heightOffset = 400
-  camera.radius = 350
+  const camera = new FollowCamera("camera", new Vector3(0, 10, 0), scene, target)
+  camera.heightOffset = 290
+  camera.radius = -615
   camera.attachControl(true)
   return camera
 }
 
 async function loadMeshes(scene: Scene) {
-  return SceneLoader.ImportMeshAsync("", "/", "bot.babylon", scene)
+  return SceneLoader.ImportMeshAsync("", "/", "player.babylon", scene)
+}
+
+async function loadAnimation(scene: Scene, animation: string) {
+  const mode = SceneLoaderAnimationGroupLoadingMode.NoSync
+  return SceneLoader.ImportAnimationsAsync("", `${animation}.gltf`, scene, false, mode, ({ name }) => {
+    if (name === "__root__") {
+      return scene
+    }
+    return scene.getNodeByName(name)
+  })
 }
 
 function initialiseShadow(light: ShadowLight, mesh: AbstractMesh) {
