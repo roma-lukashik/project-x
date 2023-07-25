@@ -5,7 +5,7 @@ import { Observer } from "@babylonjs/core/Misc"
 import { Nullable } from "@babylonjs/core/types"
 import { Entity } from "../entity"
 import { Mesh } from "@babylonjs/core/Meshes"
-import { PhysicsBody, PhysicsMotionType } from "@babylonjs/core/Physics/v2"
+import { PhysicsBody } from "@babylonjs/core/Physics/v2"
 import { AnimationController } from "../../animation/controller"
 import { PlayerAnimation } from "./animations"
 import { AnimationGroup } from "@babylonjs/core/Animations"
@@ -19,9 +19,9 @@ export class Player implements Entity {
   private readonly animationController: AnimationController
 
   public constructor(private readonly scene: Scene) {
-    this.mesh = getMeshByName("Alpha_Surface", scene)
-    this.physicsBody = new PhysicsBody(this.mesh, PhysicsMotionType.ANIMATED, false, this.scene)
-    this.physicsBody.setMassProperties({ mass: 70 })
+    this.mesh = getMeshByName("__root__", scene)
+    // this.physicsBody = new PhysicsBody(this.mesh, PhysicsMotionType.ANIMATED, true, this.scene)
+    // this.physicsBody.setMassProperties({ mass: 70 })
     this.animationController = new AnimationController(this.scene)
     this.stateController = new PlayerStateController(this, this.scene)
     this.stateController.change(this.stateController.idleState)

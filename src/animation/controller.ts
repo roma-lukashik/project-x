@@ -1,20 +1,18 @@
 import type { Scene } from "@babylonjs/core/scene"
-import { blendAnimations } from "../utils/animation"
 import type { AnimationGroup } from "@babylonjs/core/Animations"
-import type { Nullable } from "@babylonjs/core/types"
-import type { Observer } from "@babylonjs/core/Misc"
+import { AnimationBlender } from "./blender"
 
 export class AnimationController {
+  private readonly blender: AnimationBlender
   private currentAnimation?: AnimationGroup
-  private blendingObserver: Nullable<Observer<Scene>>
 
-  public constructor(private scene: Scene) {
+  public constructor(scene: Scene) {
+    this.blender = new AnimationBlender(scene)
   }
 
   public blend(animation: AnimationGroup): void {
     if (this.currentAnimation) {
-      this.blendingObserver?.remove()
-      this.blendingObserver = blendAnimations(this.scene, this.currentAnimation, animation)
+      this.blender.run(this.currentAnimation, animation)
     } else {
       animation.setWeightForAllAnimatables(1)
       animation.play(true)
@@ -23,7 +21,7 @@ export class AnimationController {
   }
 
   public run(animation: AnimationGroup): void {
-    this.currentAnimation?.stop()
+    this.blender.stop()
     this.currentAnimation = animation
     animation.setWeightForAllAnimatables(1)
     animation.play(false)

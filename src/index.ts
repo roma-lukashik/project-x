@@ -87,17 +87,12 @@ function createCamera(scene: Scene, target: AbstractMesh) {
 }
 
 async function loadMeshes(scene: Scene) {
-  return SceneLoader.ImportMeshAsync("", "/", "player.babylon", scene)
+  return SceneLoader.ImportMeshAsync("", "/", "player.gltf", scene)
 }
 
 async function loadAnimation(scene: Scene, animation: string) {
   const mode = SceneLoaderAnimationGroupLoadingMode.NoSync
-  return SceneLoader.ImportAnimationsAsync("", `${animation}.gltf`, scene, false, mode, ({ name }) => {
-    if (name === "__root__") {
-      return scene
-    }
-    return scene.getNodeByName(name)
-  })
+  return SceneLoader.ImportAnimationsAsync("", `${animation}.gltf`, scene, false, mode)
 }
 
 function initialiseShadow(light: ShadowLight, mesh: AbstractMesh) {
