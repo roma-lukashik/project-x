@@ -29,7 +29,7 @@ export class Player implements Entity {
     this.physicsBody.setMassProperties({ mass: 70 })
     this.animationController = new AnimationController(this.scene)
     this.stateController = new PlayerStateController(this)
-    this.stateController.change(this.stateController.idleState)
+    this.stateController.change(this.stateController.idle)
     this.observer = this.scene.onBeforeRenderObservable.add(() => this.stateController.update())
   }
 

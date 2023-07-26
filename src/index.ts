@@ -59,6 +59,8 @@ async function createPhysics(scene: Scene) {
 function createEnvironment(scene: Scene) {
   const env = scene.createDefaultEnvironment({
     enableGroundShadow: true,
+    groundSize: 1000,
+    skyboxSize: 1200,
   })
   if (!env) {
     throw new Error("Cannot create a scene")
@@ -74,7 +76,7 @@ function createAmbientLight(scene: Scene) {
 
 function createSunLight(scene: Scene) {
   const light = new DirectionalLight("directionalLight", new Vector3(0, -0.5, -1.0), scene)
-  light.position = new Vector3(0, 500, 5)
+  light.position = new Vector3(0, 500, 500)
   return light
 }
 

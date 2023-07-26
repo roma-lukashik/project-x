@@ -20,13 +20,13 @@ export class RunState implements State {
   public update(controller: PlayerStateController) {
     if (!KeyboardManager.getKey("Shift")) {
       if (!KeyboardManager.getKey("w")) {
-        controller.change(controller.idleState)
+        controller.change(controller.idle)
       } else {
-        controller.change(controller.walkState)
+        controller.change(controller.walk)
       }
     } else {
       if (KeyboardManager.getKey(" ")) {
-        controller.change(controller.jumpInRunState)
+        controller.change(controller.jumpInRun)
       }
     }
   }

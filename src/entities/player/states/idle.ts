@@ -21,12 +21,12 @@ export class IdleState implements State {
   public update(controller: PlayerStateController) {
     if (KeyboardManager.getKey("w")) {
       if (KeyboardManager.getKey("Shift")) {
-        controller.change(controller.runState)
+        controller.change(controller.run)
       } else {
-        controller.change(controller.walkState)
+        controller.change(controller.walk)
       }
     } else if (KeyboardManager.getKey(" ")) {
-      controller.change(controller.jumpState)
+      controller.change(controller.jump)
     }
   }
 }

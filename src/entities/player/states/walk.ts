@@ -19,9 +19,11 @@ export class WalkState implements State {
 
   public update(controller: PlayerStateController) {
     if (KeyboardManager.getKey("Shift")) {
-      controller.change(controller.runState)
+      controller.change(controller.run)
     } else if (!KeyboardManager.getKey("w")) {
-      controller.change(controller.idleState)
+      controller.change(controller.idle)
+    } else if (KeyboardManager.getKey(" ")) {
+      controller.change(controller.jumpInWalk)
     }
   }
 }

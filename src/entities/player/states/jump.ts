@@ -10,7 +10,7 @@ export class JumpState implements State {
 
   public onEnter(controller: PlayerStateController) {
     const jump = this.player.jump()
-    jump.onAnimationEndObservable.addOnce(() => controller.change(controller.idleState))
+    jump.onAnimationEndObservable.addOnce(() => controller.change(controller.idle))
   }
 
   public onExit() {
