@@ -2,7 +2,7 @@ import type { Scene } from "@babylonjs/core/scene"
 import { AnimationGroup } from "@babylonjs/core/Animations"
 import type { Nullable } from "@babylonjs/core/types"
 import type { Observer } from "@babylonjs/core/Misc"
-import { WeightedAnimationGroup } from "./weightedAnimationGroup";
+import { WeightedAnimationGroup } from "./weightedAnimationGroup"
 
 export class AnimationController {
   private readonly animationsPool: Map<string, WeightedAnimationGroup> = new Map()
