@@ -50,17 +50,20 @@ export class Player implements Entity {
 
   public destroy(): void {
     this.scene.onBeforeRenderObservable.remove(this.observer)
+    this.animationController.destroy()
   }
 
   private runAnimationLoop(animationName: PlayerAnimation) {
     const animation = this.getAnimationGroup(animationName)
-    this.animationController.blend(animation)
+    this.animationController.run(animation)
     return animation
   }
 
   private runAnimationOnce(animationName: PlayerAnimation) {
+    this.animationController.stop()
     const animation = this.getAnimationGroup(animationName)
-    this.animationController.run(animation)
+    animation.setWeightForAllAnimatables(1)
+    animation.play(false)
     return animation
   }
 
