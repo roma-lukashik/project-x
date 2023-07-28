@@ -12,7 +12,7 @@ export class IdleState implements State {
 
   public onEnter() {
     this.player.idle()
-    this.player.physicsBody.setLinearVelocity(Vector3.Zero())
+    this.player.physics.body.setLinearVelocity(Vector3.Zero())
   }
 
   public onExit() {

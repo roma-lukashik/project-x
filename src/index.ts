@@ -2,7 +2,7 @@ import { Engine } from "@babylonjs/core/Engines/engine"
 import { Scene } from "@babylonjs/core/scene"
 import HavokPhysics from "@babylonjs/havok"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
-import { Color3, Vector3 } from "@babylonjs/core/Maths"
+import { Vector3 } from "@babylonjs/core/Maths"
 import { FollowCamera } from "@babylonjs/core/Cameras"
 import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
 import { AbstractMesh } from "@babylonjs/core/Meshes"
@@ -12,6 +12,9 @@ import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
 import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
 import { KeyboardManager } from "./keyboard"
 import "@babylonjs/loaders/glTF/2.0"
+import { Box } from "./entities/box/box"
+import { Inspector } from "@babylonjs/inspector"
+import { Terrain } from "./entities/terrain/terrain"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -39,12 +42,16 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   await loadAnimation(scene, "jumpInRun")
   await loadAnimation(scene, "jumpInPlace")
 
-  createEnvironment(scene)
   createAmbientLight(scene)
   const light = createSunLight(scene)
+  new Terrain(scene, 10)
   const player = new Player(scene)
-  initialiseShadow(light, player.mesh)
+  const box = new Box(scene)
+  const shadow = initialiseShadow(light)
+  shadow.addShadowCaster(player.mesh).addShadowCaster(box.mesh)
   createCamera(scene, player.mesh)
+
+  Inspector.Show(scene, {})
 
   engine.runRenderLoop(() => scene.render())
   window.addEventListener("resize", () => engine.resize())
@@ -53,19 +60,8 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 async function createPhysics(scene: Scene) {
   const physics = await HavokPhysics()
   const physicsPlugin = new HavokPlugin(true, physics)
-  scene.enablePhysics(new Vector3(0, -9.8, 0), physicsPlugin)
-}
-
-function createEnvironment(scene: Scene) {
-  const env = scene.createDefaultEnvironment({
-    enableGroundShadow: true,
-    groundSize: 1000,
-    skyboxSize: 1200,
-  })
-  if (!env) {
-    throw new Error("Cannot create a scene")
-  }
-  env.setMainColor(Color3.Gray())
+  scene.enablePhysics(new Vector3(0, -9.81, 0), physicsPlugin)
+  scene.collisionsEnabled = true
 }
 
 function createAmbientLight(scene: Scene) {
@@ -75,16 +71,18 @@ function createAmbientLight(scene: Scene) {
 }
 
 function createSunLight(scene: Scene) {
-  const light = new DirectionalLight("directionalLight", new Vector3(0, -0.5, -1.0), scene)
-  light.position = new Vector3(0, 500, 500)
+  const light = new DirectionalLight("directionalLight", new Vector3(0.5, -0.5, -1.0), scene)
+  light.position = new Vector3(0, 10, 10)
   return light
 }
 
 function createCamera(scene: Scene, target: AbstractMesh) {
-  const camera = new FollowCamera("camera", new Vector3(0, 10, 0), scene, target)
-  camera.heightOffset = 290
-  camera.radius = -615
+  const camera = new FollowCamera("camera", new Vector3(0, 1, 0), scene, target)
+  camera.heightOffset = 2.9
+  camera.radius = -6
   camera.attachControl(true)
+  camera.cameraAcceleration = .1
+  camera.maxCameraSpeed = 2
   return camera
 }
 
@@ -97,11 +95,10 @@ async function loadAnimation(scene: Scene, animation: string) {
   return SceneLoader.ImportAnimationsAsync("", `${animation}.gltf`, scene, false, mode)
 }
 
-function initialiseShadow(light: ShadowLight, mesh: AbstractMesh) {
+function initialiseShadow(light: ShadowLight) {
   const shadowGenerator = new ShadowGenerator(1024, light)
   shadowGenerator.useBlurExponentialShadowMap = true
   shadowGenerator.blurKernel = 32
-  shadowGenerator.addShadowCaster(mesh, true)
   return shadowGenerator
 }
 

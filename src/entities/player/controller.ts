@@ -5,8 +5,9 @@ import { IdleState } from "./states/idle"
 import { WalkState } from "./states/walk"
 import { RunState } from "./states/run"
 import { JumpState } from "./states/jump"
-import { JumpInWalkState } from "./states/jumpInWalk";
+import { JumpInWalkState } from "./states/jumpInWalk"
 import { JumpInRunState } from "./states/jumpInRun"
+import { Scene } from "@babylonjs/core/scene"
 
 export class PlayerStateController extends StateController {
   public readonly idle: State
@@ -16,11 +17,11 @@ export class PlayerStateController extends StateController {
   public readonly jumpInWalk: State
   public readonly jumpInRun: State
 
-  public constructor(player: Player) {
+  public constructor(player: Player, scene: Scene) {
     super()
     this.idle = new IdleState(player)
-    this.walk = new WalkState(player)
-    this.run = new RunState(player)
+    this.walk = new WalkState(player, scene)
+    this.run = new RunState(player, scene)
     this.jump = new JumpState(player)
     this.jumpInWalk = new JumpInWalkState(player)
     this.jumpInRun = new JumpInRunState(player)

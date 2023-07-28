@@ -11,7 +11,7 @@ export class JumpInRunState implements State {
   public onEnter(controller: PlayerStateController) {
     const jumpInRun = this.player.jumpInRun()
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.run))
-    this.player.physicsBody.setLinearVelocity(this.player.mesh.forward.scale(this.player.runningSpeed))
+    this.player.physics.body.setLinearVelocity(this.player.mesh.forward.scale(this.player.runningSpeed))
   }
 
   public onExit() {
