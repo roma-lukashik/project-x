@@ -12,7 +12,7 @@ export class Box implements Entity {
 
   public constructor(scene: Scene) {
     this.mesh = CreateBox("Box", { size: 2 })
-    this.mesh.position.set(0, 1, 4)
+    this.mesh.position.set(5, 1, 4)
     this.mesh.receiveShadows = true
     this.mesh.checkCollisions = true
     this.physics = new PhysicsAggregate(

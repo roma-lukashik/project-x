@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { getMeshByName } from "../../utils/scene"
+import { getAnimationGroupByName, getMeshByName } from "../../utils/scene"
 import { PlayerStateController } from "./controller"
 import { Observer } from "@babylonjs/core/Misc"
 import { Nullable } from "@babylonjs/core/types"
@@ -83,6 +83,6 @@ export class Player implements Entity {
   }
 
   private getAnimationGroup(animationName: PlayerAnimation) {
-    return this.scene.getAnimationGroupByName(animationName)!
+    return getAnimationGroupByName(animationName, this.scene)
   }
 }

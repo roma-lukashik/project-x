@@ -21,6 +21,7 @@ export class AnimationController {
 
     if (!this.animationsPool.has(animation.name)) {
       this.animationsPool.set(animation.name, this.current)
+      this.current.setWeight(0)
       this.current.target.play(true)
     }
 
@@ -52,6 +53,7 @@ export class AnimationController {
 
   private calculateWeight(animation: WeightedAnimationGroup) {
     const weight = animation.getWeight()
-    return animation === this.current ? Math.min(weight + this.step, 1) : Math.max(weight - this.step, 0)
+    const s = this.animationsPool.size - 1
+    return animation === this.current ? Math.min(weight + this.step, 1) : Math.max(weight - this.step / s, 0)
   }
 }

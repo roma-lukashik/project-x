@@ -36,15 +36,15 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   await createPhysics(scene)
   await loadMeshes(scene)
-  await loadAnimation(scene, "idle")
   await loadAnimation(scene, "walk")
   await loadAnimation(scene, "run")
-  await loadAnimation(scene, "jumpInRun")
   await loadAnimation(scene, "jumpInPlace")
+  await loadAnimation(scene, "jumpInRun")
+  await loadAnimation(scene, "idle")
 
   createAmbientLight(scene)
   const light = createSunLight(scene)
-  new Terrain(scene, 10)
+  new Terrain(scene, 100)
   const player = new Player(scene)
   const box = new Box(scene)
   const shadow = initialiseShadow(light)
