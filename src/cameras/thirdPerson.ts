@@ -1,0 +1,65 @@
+import { Scene } from "@babylonjs/core/scene"
+import { AbstractMesh } from "@babylonjs/core/Meshes"
+import { UniversalCamera } from "@babylonjs/core/Cameras"
+import { Scalar, Vector3 } from "@babylonjs/core/Maths"
+import { Tools } from "@babylonjs/core/Misc"
+
+export class ThirdPersonCamera {
+  private readonly camera: UniversalCamera
+  private mouseX: number = 0
+  private mouseY: number = 0
+
+  public constructor(
+    scene: Scene,
+    target: AbstractMesh,
+    private readonly canvas: HTMLCanvasElement,
+    private readonly initialPosition: Vector3 = new Vector3(0, 0.5, -2.75),
+  ) {
+    this.camera = new UniversalCamera("ThirdPersonCamera", this.initialPosition, scene)
+    this.camera.fov = 1.25
+    this.camera.minZ = 0
+    this.camera.applyGravity = true
+    this.camera.checkCollisions = true
+    this.camera.inputs.clear()
+    this.camera.parent = target
+    this.setupPointerLock()
+  }
+
+  public update(): void {
+    this.camera.rotation.x = Tools.ToRadians(this.mouseY)
+    this.camera.rotation.y = Tools.ToRadians(this.mouseX)
+    this.camera.rotation.z = 0
+    this.camera.position = this.initialPosition.applyRotationQuaternion(this.camera.rotation.toQuaternion())
+  }
+
+  public destroy(): void {
+    document.removeEventListener("pointerlockchange", this.onPointerLockChange, false)
+    this.canvas.removeEventListener("click", this.requestPointerLock)
+  }
+
+  private setupPointerLock() {
+    document.addEventListener("pointerlockchange", this.onPointerLockChange, false)
+    this.canvas.addEventListener("click", this.requestPointerLock)
+  }
+
+  private onPointerLockChange = () => {
+    if (document.pointerLockElement === this.canvas) {
+      document.addEventListener("mousemove", this.mouseMove, false)
+    } else {
+      document.removeEventListener("mousemove", this.mouseMove, false)
+    }
+  }
+
+  private requestPointerLock = () => {
+    this.canvas.requestPointerLock()
+  }
+
+  private mouseMove = (event: MouseEvent) => {
+    const movementX = event.movementX ?? event.mozMovementX ?? event.webkitMovementX ?? 0
+    const movementY = event.movementY ?? event.mozMovementY ?? event.webkitMovementY ?? 0
+
+    this.mouseX += movementX * 0.1
+    this.mouseY += movementY * 0.1
+    this.mouseY = Scalar.Clamp(this.mouseY, -35, 45)
+  }
+}

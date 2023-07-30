@@ -3,9 +3,8 @@ import { Scene } from "@babylonjs/core/scene"
 import HavokPhysics from "@babylonjs/havok"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
 import { Vector3 } from "@babylonjs/core/Maths"
-import { FollowCamera } from "@babylonjs/core/Cameras"
 import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
-import { AbstractMesh, CreateBox, Mesh } from "@babylonjs/core/Meshes"
+import { CreateBox, Mesh } from "@babylonjs/core/Meshes"
 import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
@@ -15,7 +14,8 @@ import "@babylonjs/loaders/glTF/2.0"
 import { Box } from "./entities/box/box"
 import { Inspector } from "@babylonjs/inspector"
 import { Terrain } from "./entities/terrain/terrain"
-import { SkyMaterial } from "@babylonjs/materials";
+import { SkyMaterial } from "@babylonjs/materials"
+import { ThirdPersonCamera } from "./cameras/thirdPerson"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -37,11 +37,6 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   await createPhysics(scene)
   await loadMeshes(scene)
-  await loadAnimation(scene, "walk")
-  await loadAnimation(scene, "run")
-  await loadAnimation(scene, "jumpInPlace")
-  await loadAnimation(scene, "jumpInRun")
-  await loadAnimation(scene, "idle")
 
   createAmbientLight(scene)
   createSkybox(scene)
@@ -51,11 +46,14 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const box = new Box(scene)
   const shadow = initialiseShadow(light)
   shadow.addShadowCaster(player.mesh).addShadowCaster(box.mesh)
-  createCamera(scene, player.mesh)
+  const camera = new ThirdPersonCamera(scene, player.mesh, canvas)
 
   Inspector.Show(scene, {})
 
-  engine.runRenderLoop(() => scene.render())
+  engine.runRenderLoop(() => {
+    camera.update()
+    scene.render()
+  })
   window.addEventListener("resize", () => engine.resize())
 }
 
@@ -78,18 +76,15 @@ function createSunLight(scene: Scene) {
   return light
 }
 
-function createCamera(scene: Scene, target: AbstractMesh) {
-  const camera = new FollowCamera("camera", new Vector3(0, 1, 0), scene, target)
-  camera.heightOffset = 2.9
-  camera.radius = -6
-  camera.attachControl(true)
-  camera.cameraAcceleration = .1
-  camera.maxCameraSpeed = 2
-  return camera
-}
-
 async function loadMeshes(scene: Scene) {
-  return SceneLoader.ImportMeshAsync("", "/", "player.gltf", scene)
+  await SceneLoader.ImportMeshAsync("", "/", "player.gltf", scene)
+  await Promise.all([
+    loadAnimation(scene, "walk"),
+    loadAnimation(scene, "run"),
+    loadAnimation(scene, "jumpInPlace"),
+    loadAnimation(scene, "jumpInRun"),
+    loadAnimation(scene, "idle"),
+  ])
 }
 
 async function loadAnimation(scene: Scene, animation: string) {
