@@ -5,7 +5,7 @@ import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from
 import { Vector3 } from "@babylonjs/core/Maths"
 import { FollowCamera } from "@babylonjs/core/Cameras"
 import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
-import { AbstractMesh } from "@babylonjs/core/Meshes"
+import { AbstractMesh, CreateBox, Mesh } from "@babylonjs/core/Meshes"
 import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
@@ -15,6 +15,7 @@ import "@babylonjs/loaders/glTF/2.0"
 import { Box } from "./entities/box/box"
 import { Inspector } from "@babylonjs/inspector"
 import { Terrain } from "./entities/terrain/terrain"
+import { SkyMaterial } from "@babylonjs/materials";
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -43,6 +44,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   await loadAnimation(scene, "idle")
 
   createAmbientLight(scene)
+  createSkybox(scene)
   const light = createSunLight(scene)
   new Terrain(scene, 100)
   const player = new Player(scene)
@@ -100,6 +102,13 @@ function initialiseShadow(light: ShadowLight) {
   shadowGenerator.useBlurExponentialShadowMap = true
   shadowGenerator.blurKernel = 32
   return shadowGenerator
+}
+
+function createSkybox(scene: Scene) {
+  const box = CreateBox("SkyBox", { size: 100, sideOrientation: Mesh.BACKSIDE }, scene)
+  const material = new SkyMaterial('SkyMaterial', scene)
+  material.inclination = -0.35
+  box.material = material
 }
 
 main()
