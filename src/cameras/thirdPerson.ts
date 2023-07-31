@@ -1,5 +1,5 @@
-import { Scene } from "@babylonjs/core/scene"
-import { AbstractMesh } from "@babylonjs/core/Meshes"
+import type { Scene } from "@babylonjs/core/scene"
+import type { TransformNode } from "@babylonjs/core/Meshes"
 import { UniversalCamera } from "@babylonjs/core/Cameras"
 import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { Tools } from "@babylonjs/core/Misc"
@@ -11,7 +11,7 @@ export class ThirdPersonCamera {
 
   public constructor(
     scene: Scene,
-    target: AbstractMesh,
+    private readonly target: TransformNode,
     private readonly canvas: HTMLCanvasElement,
     private readonly initialPosition: Vector3 = new Vector3(0, 0.5, -2.75),
   ) {
@@ -26,10 +26,9 @@ export class ThirdPersonCamera {
   }
 
   public update(): void {
-    this.camera.rotation.x = Tools.ToRadians(this.mouseY)
-    this.camera.rotation.y = Tools.ToRadians(this.mouseX)
-    this.camera.rotation.z = 0
-    this.camera.position = this.initialPosition.applyRotationQuaternion(this.camera.rotation.toQuaternion())
+    this.target.rotation.x = Tools.ToRadians(this.mouseY)
+    this.target.rotation.y = Tools.ToRadians(this.mouseX)
+    this.target.rotation.z = 0
   }
 
   public destroy(): void {

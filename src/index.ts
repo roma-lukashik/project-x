@@ -46,7 +46,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const box = new Box(scene)
   const shadow = initialiseShadow(light)
   shadow.addShadowCaster(player.mesh).addShadowCaster(box.mesh)
-  const camera = new ThirdPersonCamera(scene, player.mesh, canvas)
+  const camera = new ThirdPersonCamera(scene, player.cameraTarget, canvas)
 
   Inspector.Show(scene, {})
 

@@ -4,7 +4,7 @@ import { PlayerStateController } from "./controller"
 import { Observer } from "@babylonjs/core/Misc"
 import { Nullable } from "@babylonjs/core/types"
 import { Entity } from "../entity"
-import { CreateBox, Mesh } from "@babylonjs/core/Meshes"
+import { CreateBox, Mesh, TransformNode } from "@babylonjs/core/Meshes"
 import { PhysicsAggregate, PhysicsMotionType, PhysicsShapeType } from "@babylonjs/core/Physics/v2"
 import { AnimationController } from "../../animation/controller"
 import { PlayerAnimation } from "./animations"
@@ -14,6 +14,7 @@ export class Player implements Entity {
   private static readonly meshName = "__root__"
 
   public readonly mesh: Mesh
+  public readonly cameraTarget: TransformNode
   public readonly physics: PhysicsAggregate
   public readonly walkingSpeed = 1
   public readonly runningSpeed = this.walkingSpeed * 4
@@ -23,7 +24,7 @@ export class Player implements Entity {
   private readonly animationController: AnimationController
 
   public constructor(private readonly scene: Scene) {
-    this.mesh = CreateBox("PlayerPhysicsRoot", { width: 0.6, depth: 0.6, height: 1.8 })
+    this.mesh = CreateBox("PlayerRoot", { width: 0.6, depth: 0.6, height: 1.8 })
     this.mesh.position.y = 0.9
     this.mesh.visibility = 0
     this.mesh.addChild(getMeshByName(Player.meshName, scene))
@@ -35,6 +36,8 @@ export class Player implements Entity {
       scene,
     )
     this.physics.body.setMotionType(PhysicsMotionType.DYNAMIC)
+    this.cameraTarget = new TransformNode("PlayerCameraTarget", scene)
+    this.cameraTarget.parent = this.mesh
     this.animationController = new AnimationController(scene)
     this.stateController = new PlayerStateController(this, scene)
     this.stateController.change(this.stateController.idle)
