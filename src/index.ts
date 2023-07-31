@@ -9,7 +9,7 @@ import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
 import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
-import { KeyboardManager } from "./keyboard"
+import { DeviceManager } from "./devices/device"
 import "@babylonjs/loaders/glTF/2.0"
 import { Box } from "./entities/box/box"
 import { Inspector } from "@babylonjs/inspector"
@@ -33,7 +33,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const engine = new Engine(canvas)
   const scene = new Scene(engine)
 
-  KeyboardManager.init(scene)
+  DeviceManager.init(scene)
 
   await createPhysics(scene)
   await loadMeshes(scene)

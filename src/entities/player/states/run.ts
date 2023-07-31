@@ -1,5 +1,5 @@
 import { State } from "../../../state/state"
-import { KeyboardManager } from "../../../keyboard"
+import { DeviceManager, KeyboardKey } from "../../../devices/device"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
 import { Scene } from "@babylonjs/core/scene"
@@ -27,14 +27,14 @@ export class RunState implements State {
   }
 
   public update(controller: PlayerStateController) {
-    if (!KeyboardManager.getKey("Shift")) {
-      if (!KeyboardManager.getKey("w")) {
+    if (!DeviceManager.getKey(KeyboardKey.Shift)) {
+      if (!DeviceManager.getKey(KeyboardKey.W)) {
         controller.change(controller.idle)
       } else {
         controller.change(controller.walk)
       }
     } else {
-      if (KeyboardManager.getKey(" ")) {
+      if (DeviceManager.getKey(KeyboardKey.Space)) {
         controller.change(controller.jumpInRun)
       }
     }

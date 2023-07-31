@@ -1,6 +1,6 @@
 import { Vector3 } from "@babylonjs/core/Maths"
 import { State } from "../../../state/state"
-import { KeyboardManager } from "../../../keyboard"
+import { DeviceManager, KeyboardKey } from "../../../devices/device"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
 
@@ -19,13 +19,13 @@ export class IdleState implements State {
   }
 
   public update(controller: PlayerStateController) {
-    if (KeyboardManager.getKey("w")) {
-      if (KeyboardManager.getKey("Shift")) {
+    if (DeviceManager.getKey(KeyboardKey.W)) {
+      if (DeviceManager.getKey(KeyboardKey.Shift)) {
         controller.change(controller.run)
       } else {
         controller.change(controller.walk)
       }
-    } else if (KeyboardManager.getKey(" ")) {
+    } else if (DeviceManager.getKey(KeyboardKey.Space)) {
       controller.change(controller.jump)
     }
   }

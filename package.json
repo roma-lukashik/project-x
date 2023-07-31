@@ -1,7 +1,7 @@
 {
   "name": "project-x",
-  "version": "0.0.0",
-  "description": "This is an X game",
+  "version": "0.0.1",
+  "description": "Third person shooter",
   "main": "src/index.ts",
   "scripts": {
     "start": "webpack-dev-server",

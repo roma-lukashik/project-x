@@ -34,12 +34,12 @@ export class ThirdPersonCamera {
 
   public destroy(): void {
     document.removeEventListener("pointerlockchange", this.onPointerLockChange, false)
-    this.canvas.removeEventListener("click", this.requestPointerLock)
+    this.canvas.removeEventListener("click", this.canvas.requestPointerLock)
   }
 
   private setupPointerLock() {
     document.addEventListener("pointerlockchange", this.onPointerLockChange, false)
-    this.canvas.addEventListener("click", this.requestPointerLock)
+    this.canvas.addEventListener("click", this.canvas.requestPointerLock)
   }
 
   private onPointerLockChange = () => {
@@ -50,16 +50,8 @@ export class ThirdPersonCamera {
     }
   }
 
-  private requestPointerLock = () => {
-    this.canvas.requestPointerLock()
-  }
-
-  private mouseMove = (event: MouseEvent) => {
-    const movementX = event.movementX ?? event.mozMovementX ?? event.webkitMovementX ?? 0
-    const movementY = event.movementY ?? event.mozMovementY ?? event.webkitMovementY ?? 0
-
+  private mouseMove = ({ movementX, movementY }: MouseEvent) => {
     this.mouseX += movementX * 0.1
-    this.mouseY += movementY * 0.1
-    this.mouseY = Scalar.Clamp(this.mouseY, -35, 45)
+    this.mouseY = Scalar.Clamp(this.mouseY + movementY * 0.1, -25, 45)
   }
 }
