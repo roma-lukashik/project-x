@@ -18,7 +18,10 @@ export class RunState implements State {
   public onEnter() {
     this.player.run()
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
-      this.player.physics.body.setLinearVelocity(this.player.mesh.forward.scale(this.player.runningSpeed))
+      this.player.followCamera()
+      this.player.physics.body.setLinearVelocity(
+        this.player.cameraTarget.forward.multiplyByFloats(this.player.runningSpeed, 0, this.player.runningSpeed),
+      )
     })
   }
 

@@ -18,7 +18,10 @@ export class WalkState implements State {
   public onEnter() {
     this.player.walk()
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
-      this.player.physics.body.setLinearVelocity(this.player.mesh.forward.scale(this.player.walkingSpeed))
+      this.player.followCamera()
+      this.player.physics.body.setLinearVelocity(
+        this.player.cameraTarget.forward.multiplyByFloats(this.player.walkingSpeed, 0, this.player.walkingSpeed),
+      )
     })
   }
 
@@ -27,10 +30,10 @@ export class WalkState implements State {
   }
 
   public update(controller: PlayerStateController) {
-    if (DeviceManager.getKey(KeyboardKey.Shift)) {
-      controller.change(controller.run)
-    } else if (!DeviceManager.getKey(KeyboardKey.W)) {
+    if (!DeviceManager.getKey(KeyboardKey.W)) {
       controller.change(controller.idle)
+    } else if (DeviceManager.getKey(KeyboardKey.Shift)) {
+      controller.change(controller.run)
     } else if (DeviceManager.getKey(KeyboardKey.Space)) {
       controller.change(controller.jumpInWalk)
     }

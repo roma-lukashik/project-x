@@ -13,9 +13,9 @@ export class ThirdPersonCamera {
     scene: Scene,
     private readonly target: TransformNode,
     private readonly canvas: HTMLCanvasElement,
-    private readonly initialPosition: Vector3 = new Vector3(0, 0.5, -2.75),
+    initialPosition: Vector3 = new Vector3(0, 0.5, -2.75),
   ) {
-    this.camera = new UniversalCamera("ThirdPersonCamera", this.initialPosition, scene)
+    this.camera = new UniversalCamera("ThirdPersonCamera", initialPosition, scene)
     this.camera.fov = 1.25
     this.camera.minZ = 0
     this.camera.applyGravity = true

@@ -64,6 +64,11 @@ export class Player implements Entity {
     return this.runAnimationOnce(PlayerAnimation.JumpInRun)
   }
 
+  public followCamera(): void {
+    this.mesh.addRotation(0, this.cameraTarget.rotation.y, 0)
+    this.cameraTarget.rotation.y = 0
+  }
+
   public destroy(): void {
     this.scene.onBeforeRenderObservable.remove(this.observer)
     this.animationController.destroy()
