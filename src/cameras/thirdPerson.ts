@@ -13,7 +13,7 @@ export class ThirdPersonCamera {
     scene: Scene,
     private readonly target: TransformNode,
     private readonly canvas: HTMLCanvasElement,
-    initialPosition: Vector3 = new Vector3(0, 0.5, -2.75),
+    initialPosition: Vector3 = new Vector3(0, 1.4, -2.75),
   ) {
     this.camera = new UniversalCamera("ThirdPersonCamera", initialPosition, scene)
     this.camera.fov = 1.25

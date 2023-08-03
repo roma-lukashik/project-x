@@ -19,9 +19,8 @@ export class JumpInRunState implements State {
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.run))
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      this.player.physics.body.setLinearVelocity(
-        this.player.cameraTarget.forward.multiplyByFloats(this.player.runningSpeed, 0, this.player.runningSpeed)
-      )
+      const movingVector = this.player.mesh.forward.clone().normalize().scaleInPlace(this.player.runningSpeed)
+      this.player.mesh.moveWithCollisions(movingVector)
     })
   }
 

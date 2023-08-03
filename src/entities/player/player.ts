@@ -5,7 +5,6 @@ import { Observer } from "@babylonjs/core/Misc"
 import { Nullable } from "@babylonjs/core/types"
 import { Entity } from "../entity"
 import { CreateBox, Mesh, TransformNode } from "@babylonjs/core/Meshes"
-import { PhysicsAggregate, PhysicsMotionType, PhysicsShapeType } from "@babylonjs/core/Physics/v2"
 import { AnimationController } from "../../animation/controller"
 import { PlayerAnimation } from "./animations"
 import { AnimationGroup } from "@babylonjs/core/Animations"
@@ -15,8 +14,7 @@ export class Player implements Entity {
 
   public readonly mesh: Mesh
   public readonly cameraTarget: TransformNode
-  public readonly physics: PhysicsAggregate
-  public readonly walkingSpeed = 1
+  public readonly walkingSpeed = 0.01
   public readonly runningSpeed = this.walkingSpeed * 4
 
   private readonly observer: Nullable<Observer<Scene>>
@@ -25,17 +23,9 @@ export class Player implements Entity {
 
   public constructor(private readonly scene: Scene) {
     this.mesh = CreateBox("PlayerRoot", { width: 0.6, depth: 0.6, height: 1.8 })
-    this.mesh.position.y = 0.9
     this.mesh.visibility = 0
     this.mesh.addChild(getMeshByName(Player.meshName, scene))
     this.mesh.checkCollisions = true
-    this.physics = new PhysicsAggregate(
-      this.mesh,
-      PhysicsShapeType.BOX,
-      { mass: 100, restitution: 0.01, friction: 1 },
-      scene,
-    )
-    this.physics.body.setMotionType(PhysicsMotionType.DYNAMIC)
     this.cameraTarget = new TransformNode("PlayerCameraTarget", scene)
     this.cameraTarget.parent = this.mesh
     this.animationController = new AnimationController(scene)
@@ -65,7 +55,7 @@ export class Player implements Entity {
   }
 
   public followCamera(): void {
-    this.mesh.addRotation(0, this.cameraTarget.rotation.y, 0)
+    this.mesh.rotation.y = this.cameraTarget.rotation.y
     this.cameraTarget.rotation.y = 0
   }
 
@@ -73,7 +63,6 @@ export class Player implements Entity {
     this.scene.onBeforeRenderObservable.remove(this.observer)
     this.animationController.destroy()
     this.mesh.dispose()
-    this.physics.dispose()
   }
 
   private runAnimationLoop(animationName: PlayerAnimation) {
