@@ -23,7 +23,7 @@ export class Box implements Entity {
     )
   }
 
-  public destroy(): void {
+  public dispose(): void {
     this.mesh.dispose()
     this.physics.dispose()
   }

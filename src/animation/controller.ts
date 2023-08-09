@@ -35,7 +35,7 @@ export class AnimationController {
     this.animationsPool.clear()
   }
 
-  public destroy(): void {
+  public dispose(): void {
     this.stop()
     this.scene.onBeforeRenderObservable.remove(this.observer)
   }

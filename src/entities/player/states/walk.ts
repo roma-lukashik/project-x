@@ -17,10 +17,10 @@ export class WalkState implements State {
 
   public onEnter() {
     this.player.walk()
+    this.player.speed = this.player.walkingSpeed
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      const movingVector = this.player.mesh.forward.clone().normalize().scaleInPlace(this.player.walkingSpeed)
-      this.player.mesh.moveWithCollisions(movingVector)
+      this.player.moveForward()
     })
   }
 

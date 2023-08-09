@@ -19,7 +19,7 @@ export class PlayerStateController extends StateController {
 
   public constructor(player: Player, scene: Scene) {
     super()
-    this.idle = new IdleState(player, scene)
+    this.idle = new IdleState(player)
     this.walk = new WalkState(player, scene)
     this.run = new RunState(player, scene)
     this.jump = new JumpState(player)

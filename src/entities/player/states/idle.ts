@@ -2,22 +2,21 @@ import { State } from "../../../state/state"
 import { DeviceManager, KeyboardKey } from "../../../devices/device"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
-import { Scene } from "@babylonjs/core/scene"
 
 export class IdleState implements State {
   public constructor(
     private readonly player: Player,
-    // @ts-ignore
-    private readonly scene: Scene,
   ) {
   }
 
   public onEnter() {
     this.player.idle()
-    this.player.followCamera()
+    this.player.returnCamera()
+    this.player.speed = 0
   }
 
   public onExit() {
+    this.player.previousRotation = this.player.mesh.rotation.clone()
   }
 
   public update(controller: PlayerStateController) {

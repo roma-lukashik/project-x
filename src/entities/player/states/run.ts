@@ -17,10 +17,10 @@ export class RunState implements State {
 
   public onEnter() {
     this.player.run()
+    this.player.speed = this.player.runningSpeed
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      const movingVector = this.player.mesh.forward.clone().normalize().scaleInPlace(this.player.runningSpeed)
-      this.player.mesh.moveWithCollisions(movingVector)
+      this.player.moveForward()
     })
   }
 

@@ -15,7 +15,6 @@ import { Box } from "./entities/box/box"
 import { Inspector } from "@babylonjs/inspector"
 import { Terrain } from "./entities/terrain/terrain"
 import { SkyMaterial } from "@babylonjs/materials"
-import { ThirdPersonCamera } from "./cameras/thirdPerson"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -42,18 +41,17 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   createSkybox(scene)
   const light = createSunLight(scene)
   new Terrain(scene, 100)
-  const player = new Player(scene)
+  const player = new Player("Player", scene)
   const box = new Box(scene)
   const shadow = initialiseShadow(light)
   shadow.addShadowCaster(player.mesh).addShadowCaster(box.mesh)
-  const camera = new ThirdPersonCamera(scene, player.cameraTarget, canvas)
 
   Inspector.Show(scene, {})
 
   engine.runRenderLoop(() => {
-    camera.update()
     scene.render()
   })
+
   window.addEventListener("resize", () => engine.resize())
 }
 

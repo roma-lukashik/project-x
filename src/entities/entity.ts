@@ -1,9 +1,9 @@
 import { Mesh } from "@babylonjs/core/Meshes"
 
-export interface Entity extends Destroyable {
+export interface Entity extends Disposable {
   mesh: Mesh
 }
 
-export interface Destroyable {
-  destroy(): void
+export interface Disposable {
+  dispose(): void
 }

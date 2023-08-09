@@ -16,11 +16,11 @@ export class JumpInWalkState implements State {
 
   public onEnter(controller: PlayerStateController) {
     const jumpInRun = this.player.jumpInRun()
+    this.player.speed = this.player.walkingSpeed
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.walk))
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      const movingVector = this.player.mesh.forward.clone().normalize().scaleInPlace(this.player.walkingSpeed)
-      this.player.mesh.moveWithCollisions(movingVector)
+      this.player.moveForward()
     })
   }
 
