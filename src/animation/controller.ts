@@ -16,7 +16,7 @@ export class AnimationController {
     this.observer = this.scene.onBeforeRenderObservable.add(this.changeAnimationsWeights)
   }
 
-  public run(animation: AnimationGroup): void {
+  public run(animation: AnimationGroup): WeightedAnimationGroup {
     this.current = this.animationsPool.get(animation.name) ?? new WeightedAnimationGroup(animation)
 
     if (!this.animationsPool.has(animation.name)) {
@@ -28,6 +28,8 @@ export class AnimationController {
     if (this.animationsPool.size === 1) {
       this.current.setWeight(1)
     }
+
+    return this.current
   }
 
   public stop(): void {

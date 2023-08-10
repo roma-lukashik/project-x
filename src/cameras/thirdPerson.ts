@@ -4,7 +4,7 @@ import { UniversalCamera } from "@babylonjs/core/Cameras"
 import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { Tools } from "@babylonjs/core/Misc"
 import type { Nullable } from "@babylonjs/core/types"
-import { Disposable } from "../entities/entity";
+import { Disposable } from "../entities/entity"
 
 export class ThirdPersonCamera implements Disposable {
   private readonly camera: UniversalCamera
@@ -19,7 +19,7 @@ export class ThirdPersonCamera implements Disposable {
   public constructor(
     scene: Scene,
     target: TransformNode,
-    position = new Vector3(0, 0.7, -2.75),
+    position = new Vector3(0, 1.5, -2.75),
   ) {
     this.camera = new UniversalCamera("ThirdPersonCamera", position, scene)
     this.camera.fov = 1.25

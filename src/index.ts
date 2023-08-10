@@ -8,11 +8,7 @@ import { SkyMaterial } from "@babylonjs/materials/sky"
 import { Inspector } from "@babylonjs/inspector"
 import "@babylonjs/loaders/glTF/2.0"
 import { Player } from "./entities/player/player"
-import "@babylonjs/core/Helpers/sceneHelpers"
-import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
-import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
-import { DeviceManager } from "./devices/device"
-import "@babylonjs/loaders/glTF/2.0"
+import { InputController } from "./controllers/input"
 import { Box } from "./entities/box/box"
 import { Terrain } from "./entities/terrain/terrain"
 
@@ -32,7 +28,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const engine = new Engine(canvas)
   const scene = new Scene(engine)
 
-  DeviceManager.init(scene)
+  InputController.init(scene)
 
   await loadMeshes(scene)
 
@@ -91,7 +87,7 @@ function initialiseShadow(light: ShadowLight) {
 
 function createSkybox(scene: Scene) {
   const box = CreateBox("SkyBox", { size: 100, sideOrientation: Mesh.BACKSIDE }, scene)
-  const material = new SkyMaterial('SkyMaterial', scene)
+  const material = new SkyMaterial("SkyMaterial", scene)
   material.inclination = -0.35
   box.material = material
 }

@@ -1,10 +1,11 @@
 import { State } from "../../../state/state"
-import { DeviceManager, KeyboardKey } from "../../../devices/device"
+import { InputController, KeyboardKey } from "../../../controllers/input"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
 import { Scene } from "@babylonjs/core/scene"
 import { Nullable } from "@babylonjs/core/types"
 import { Observer } from "@babylonjs/core/Misc"
+import { Scalar } from "@babylonjs/core/Maths"
 
 export class WalkState implements State {
   private observer: Nullable<Observer<Scene>>
@@ -16,11 +17,12 @@ export class WalkState implements State {
   }
 
   public onEnter() {
-    this.player.walk()
-    this.player.speed = this.player.walkingSpeed
+    const animation = this.player.walk()
+    const initialSpeed = this.player.speed
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
+      this.player.speed = Scalar.Lerp(initialSpeed, this.player.walkingSpeed, animation.getWeight())
       this.player.followCamera()
-      this.player.moveForward()
+      this.player.updateMoveDirection()
     })
   }
 
@@ -29,11 +31,11 @@ export class WalkState implements State {
   }
 
   public update(controller: PlayerStateController) {
-    if (!DeviceManager.getKey(KeyboardKey.W)) {
+    if (!InputController.getKey(KeyboardKey.W)) {
       controller.change(controller.idle)
-    } else if (DeviceManager.getKey(KeyboardKey.Shift)) {
+    } else if (InputController.getKey(KeyboardKey.Shift)) {
       controller.change(controller.run)
-    } else if (DeviceManager.getKey(KeyboardKey.Space)) {
+    } else if (InputController.getKey(KeyboardKey.Space)) {
       controller.change(controller.jumpInWalk)
     }
   }

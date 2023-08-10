@@ -20,7 +20,7 @@ export class JumpInWalkState implements State {
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.walk))
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      this.player.moveForward()
+      this.player.updateMoveDirection()
     })
   }
 

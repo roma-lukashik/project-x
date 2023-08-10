@@ -8,8 +8,10 @@ import { CreateCapsule, Mesh, TransformNode } from "@babylonjs/core/Meshes"
 import { AnimationController } from "../../animation/controller"
 import { PlayerAnimation } from "./animations"
 import { AnimationGroup } from "@babylonjs/core/Animations"
-import { ThirdPersonCamera } from "../../cameras/thirdPerson";
-import { Vector3 } from "@babylonjs/core/Maths";
+import { ThirdPersonCamera } from "../../cameras/thirdPerson"
+import { Vector3 } from "@babylonjs/core/Maths"
+import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
+import { floorRayCast } from "../../utils/math"
 
 export class Player implements Entity {
   private static readonly meshName = "__root__"
@@ -28,13 +30,16 @@ export class Player implements Entity {
   private readonly animationController: AnimationController
   private readonly camera: ThirdPersonCamera
 
+  private readonly gravity = Vector3.Zero()
+  private moveDirection = Vector3.Zero()
+  private grounded = false
+
   public constructor(
     private readonly name: string,
     private readonly scene: Scene,
   ) {
     this.mesh = CreateCapsule(this.name, { radius: 0.3, height: 1.8 })
     this.mesh.visibility = 0.0
-    this.mesh.position.y = 0.9
     this.mesh.addChild(getMeshByName(Player.meshName, scene))
     this.mesh.checkCollisions = true
     this.cameraTarget = new TransformNode(this.name + "CameraTarget", scene)
@@ -46,22 +51,24 @@ export class Player implements Entity {
     this.observer = scene.onBeforeRenderObservable.add(() => {
       this.stateController.update()
       this.camera.update()
+      this.updateGroundDetection()
+      this.applyGravity()
     })
   }
 
-  public moveForward() {
-    this.mesh.moveWithCollisions(this.mesh.forward.normalizeToNew().scaleInPlace(this.speed))
+  public updateMoveDirection() {
+    this.moveDirection = this.mesh.forward.normalizeToNew().scaleInPlace(this.speed)
   }
 
-  public idle(): AnimationGroup {
+  public idle(): WeightedAnimationGroup {
     return this.runAnimationLoop(PlayerAnimation.Idle)
   }
 
-  public walk(): AnimationGroup {
+  public walk(): WeightedAnimationGroup {
     return this.runAnimationLoop(PlayerAnimation.Walk)
   }
 
-  public run(): AnimationGroup {
+  public run(): WeightedAnimationGroup {
     return this.runAnimationLoop(PlayerAnimation.Run)
   }
 
@@ -90,8 +97,7 @@ export class Player implements Entity {
 
   private runAnimationLoop(animationName: PlayerAnimation) {
     const animation = this.getAnimationGroup(animationName)
-    this.animationController.run(animation)
-    return animation
+    return this.animationController.run(animation)
   }
 
   private runAnimationOnce(animationName: PlayerAnimation) {
@@ -104,5 +110,20 @@ export class Player implements Entity {
 
   private getAnimationGroup(animationName: PlayerAnimation) {
     return getAnimationGroupByName(animationName, this.scene)
+  }
+
+  private updateGroundDetection() {
+    this.grounded = floorRayCast(this.mesh, this.scene, 0.05)
+  }
+
+  private applyGravity() {
+    const dt = this.scene.getEngine().getDeltaTime() / 1000.0
+    if (this.grounded) {
+      this.gravity.y = 0
+    } else {
+      this.gravity.addInPlace(Vector3.Up().scaleInPlace(dt * -9.8))
+    }
+    this.moveDirection.addInPlace(this.gravity)
+    this.mesh.moveWithCollisions(this.moveDirection)
   }
 }
