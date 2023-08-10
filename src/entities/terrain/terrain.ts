@@ -1,13 +1,11 @@
-import { Entity } from "../entity"
-import { CreateGround, Mesh } from "@babylonjs/core/Meshes"
-import { PhysicsAggregate } from "@babylonjs/core/Physics/v2"
-import { Scene } from "@babylonjs/core/scene"
+import type { Entity } from "../entity"
+import { CreateGround, type Mesh } from "@babylonjs/core/Meshes"
+import type { Scene } from "@babylonjs/core/scene"
 import { Color3, Vector3 } from "@babylonjs/core/Maths"
-import { PhysicsShapeType, StandardMaterial } from "@babylonjs/core"
+import { StandardMaterial } from "@babylonjs/core/Materials"
 
 export class Terrain implements Entity {
   public readonly mesh: Mesh
-  public readonly physics: PhysicsAggregate
 
   public constructor(scene: Scene, size: number) {
     this.mesh = CreateGround("Terrain", { width: size, height: size, subdivisions: 2 }, scene)
@@ -15,17 +13,10 @@ export class Terrain implements Entity {
     this.mesh.receiveShadows = true
     this.mesh.checkCollisions = true
     this.mesh.material = this.createMaterial(scene)
-    this.physics = new PhysicsAggregate(
-      this.mesh,
-      PhysicsShapeType.BOX,
-      { mass: 0, friction: 0.2, restitution: 0.3 },
-      scene,
-    )
   }
 
   public dispose(): void {
     this.mesh.dispose()
-    this.physics.dispose()
   }
 
   private createMaterial(scene: Scene) {

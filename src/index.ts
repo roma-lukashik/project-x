@@ -1,10 +1,12 @@
 import { Engine } from "@babylonjs/core/Engines/engine"
 import { Scene } from "@babylonjs/core/scene"
-import HavokPhysics from "@babylonjs/havok"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
 import { Vector3 } from "@babylonjs/core/Maths"
 import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
 import { CreateBox, Mesh } from "@babylonjs/core/Meshes"
+import { SkyMaterial } from "@babylonjs/materials/sky"
+import { Inspector } from "@babylonjs/inspector"
+import "@babylonjs/loaders/glTF/2.0"
 import { Player } from "./entities/player/player"
 import "@babylonjs/core/Helpers/sceneHelpers"
 import "@babylonjs/core/Physics/joinedPhysicsEngineComponent"
@@ -12,9 +14,7 @@ import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins"
 import { DeviceManager } from "./devices/device"
 import "@babylonjs/loaders/glTF/2.0"
 import { Box } from "./entities/box/box"
-import { Inspector } from "@babylonjs/inspector"
 import { Terrain } from "./entities/terrain/terrain"
-import { SkyMaterial } from "@babylonjs/materials"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -34,7 +34,6 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   DeviceManager.init(scene)
 
-  await createPhysics(scene)
   await loadMeshes(scene)
 
   createAmbientLight(scene)
@@ -53,13 +52,6 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   })
 
   window.addEventListener("resize", () => engine.resize())
-}
-
-async function createPhysics(scene: Scene) {
-  const physics = await HavokPhysics()
-  const physicsPlugin = new HavokPlugin(true, physics)
-  scene.enablePhysics(new Vector3(0, -9.81, 0), physicsPlugin)
-  scene.collisionsEnabled = true
 }
 
 function createAmbientLight(scene: Scene) {
