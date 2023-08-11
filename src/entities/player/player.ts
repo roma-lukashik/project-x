@@ -15,6 +15,7 @@ import { floorRayCast } from "../../utils/math"
 
 export class Player implements Entity {
   private static readonly meshName = "__root__"
+  private static readonly gravity = -9.8
 
   public speed = 0
 
@@ -23,15 +24,14 @@ export class Player implements Entity {
   public readonly walkingSpeed = 0.01
   public readonly runningSpeed = this.walkingSpeed * 4
 
-  public previousRotation = Vector3.Zero()
+  public readonly previousRotation = Vector3.Zero()
+  public readonly gravity = Vector3.Zero()
+  public readonly moveDirection = Vector3.Zero()
 
   private readonly observer: Nullable<Observer<Scene>>
   private readonly stateController: PlayerStateController
   private readonly animationController: AnimationController
   private readonly camera: ThirdPersonCamera
-
-  private readonly gravity = Vector3.Zero()
-  private moveDirection = Vector3.Zero()
   private grounded = false
 
   public constructor(
@@ -40,10 +40,12 @@ export class Player implements Entity {
   ) {
     this.mesh = CreateCapsule(this.name, { radius: 0.3, height: 1.8 })
     this.mesh.visibility = 0.0
+    this.mesh.position.y = 0.9
+    this.mesh.ellipsoid = new Vector3(0.3, 0.9, 0.3)
     this.mesh.addChild(getMeshByName(Player.meshName, scene))
-    this.mesh.checkCollisions = true
     this.cameraTarget = new TransformNode(this.name + "CameraTarget", scene)
     this.cameraTarget.parent = this.mesh
+    this.cameraTarget.position.y = 0.9
     this.camera = new ThirdPersonCamera(this.scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
     this.stateController = new PlayerStateController(this, scene)
@@ -57,7 +59,7 @@ export class Player implements Entity {
   }
 
   public updateMoveDirection() {
-    this.moveDirection = this.mesh.forward.normalizeToNew().scaleInPlace(this.speed)
+    this.moveDirection.copyFrom(this.mesh.forward).normalize().scaleInPlace(this.speed)
   }
 
   public idle(): WeightedAnimationGroup {
@@ -121,7 +123,7 @@ export class Player implements Entity {
     if (this.grounded) {
       this.gravity.y = 0
     } else {
-      this.gravity.addInPlace(Vector3.Up().scaleInPlace(dt * -9.8))
+      this.gravity.y += dt * Player.gravity
     }
     this.moveDirection.addInPlace(this.gravity)
     this.mesh.moveWithCollisions(this.moveDirection)

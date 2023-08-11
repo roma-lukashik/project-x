@@ -1,5 +1,5 @@
 import { State } from "../../../state/state"
-import { InputController, KeyboardKey } from "../../../controllers/input"
+import { InputController, KeyboardKey, MovementKeys } from "../../../controllers/input"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
 
@@ -17,11 +17,11 @@ export class IdleState implements State {
   }
 
   public onExit() {
-    this.player.previousRotation = this.player.mesh.rotation.clone()
+    this.player.previousRotation.copyFrom(this.player.mesh.rotation)
   }
 
   public update(controller: PlayerStateController) {
-    if (InputController.getKey(KeyboardKey.W)) {
+    if (MovementKeys.some(InputController.getKey)) {
       if (InputController.getKey(KeyboardKey.Shift)) {
         controller.change(controller.run)
       } else {

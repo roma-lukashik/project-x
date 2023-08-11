@@ -8,10 +8,17 @@ export enum KeyboardKey {
   W = 87,
   A = 65,
   S = 83,
-  D = 69,
+  D = 68,
   Space = 32,
   Shift = 16,
 }
+
+export const MovementKeys = [
+  KeyboardKey.W,
+  KeyboardKey.A,
+  KeyboardKey.S,
+  KeyboardKey.D,
+]
 
 export class InputController {
   private static keyboard: Nullable<DeviceSource<DeviceType.Keyboard>>

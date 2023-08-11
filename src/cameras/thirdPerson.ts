@@ -19,7 +19,7 @@ export class ThirdPersonCamera implements Disposable {
   public constructor(
     scene: Scene,
     target: TransformNode,
-    position = new Vector3(0, 1.5, -2.75),
+    position = new Vector3(0, -0.2, -2.6),
   ) {
     this.camera = new UniversalCamera("ThirdPersonCamera", position, scene)
     this.camera.fov = 1.25

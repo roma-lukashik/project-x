@@ -1,5 +1,5 @@
 import { State } from "../../../state/state"
-import { InputController, KeyboardKey } from "../../../controllers/input"
+import { InputController, KeyboardKey, MovementKeys } from "../../../controllers/input"
 import { Player } from "../player"
 import { PlayerStateController } from "../controller"
 import { Scene } from "@babylonjs/core/scene"
@@ -32,16 +32,16 @@ export class RunState implements State {
   }
 
   public update(controller: PlayerStateController) {
+    if (!MovementKeys.some(InputController.getKey)) {
+      controller.change(controller.idle)
+      return
+    }
     if (!InputController.getKey(KeyboardKey.Shift)) {
-      if (!InputController.getKey(KeyboardKey.W)) {
-        controller.change(controller.idle)
-      } else {
-        controller.change(controller.walk)
-      }
-    } else {
-      if (InputController.getKey(KeyboardKey.Space)) {
-        controller.change(controller.jumpInRun)
-      }
+      controller.change(controller.walk)
+      return
+    }
+    if (InputController.getKey(KeyboardKey.Space)) {
+      controller.change(controller.jumpInRun)
     }
   }
 }
