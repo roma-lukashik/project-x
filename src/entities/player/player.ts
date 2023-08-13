@@ -9,7 +9,7 @@ import { AnimationController } from "../../animation/controller"
 import { PlayerAnimation } from "./animations"
 import { AnimationGroup } from "@babylonjs/core/Animations"
 import { ThirdPersonCamera } from "../../cameras/thirdPerson"
-import { Vector3 } from "@babylonjs/core/Maths"
+import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
 import { floorRayCast } from "../../utils/math"
 
@@ -44,7 +44,6 @@ export class Player implements Entity {
     this.mesh.ellipsoid = new Vector3(0.3, 0.9, 0.3)
     this.mesh.addChild(getMeshByName(Player.meshName, scene))
     this.cameraTarget = new TransformNode(this.name + "CameraTarget", scene)
-    this.cameraTarget.parent = this.mesh
     this.cameraTarget.position.y = 0.9
     this.camera = new ThirdPersonCamera(this.scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
@@ -83,12 +82,8 @@ export class Player implements Entity {
   }
 
   public followCamera(): void {
-    this.mesh.rotation.y = this.cameraTarget.rotation.y + this.previousRotation.y
-    this.cameraTarget.rotation.y = 0
-  }
-
-  public returnCamera(): void {
-    this.camera.reset()
+    this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
+    this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.15)
   }
 
   public dispose(): void {

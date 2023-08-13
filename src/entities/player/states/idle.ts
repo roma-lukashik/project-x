@@ -11,7 +11,6 @@ export class IdleState implements State {
 
   public onEnter() {
     this.player.idle()
-    this.player.returnCamera()
     this.player.speed = 0
     this.player.updateMoveDirection()
   }

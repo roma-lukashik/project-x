@@ -5,9 +5,11 @@ import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { Tools } from "@babylonjs/core/Misc"
 import type { Nullable } from "@babylonjs/core/types"
 import { Disposable } from "../entities/entity"
+import { Engine } from "@babylonjs/core/Engines/engine"
 
 export class ThirdPersonCamera implements Disposable {
   private readonly camera: UniversalCamera
+  private readonly engine: Engine
   private readonly canvas: Nullable<HTMLCanvasElement>
   private readonly target: TransformNode
   private readonly minY = -25
@@ -19,7 +21,7 @@ export class ThirdPersonCamera implements Disposable {
   public constructor(
     scene: Scene,
     target: TransformNode,
-    position = new Vector3(0, -0.2, -2.6),
+    position = new Vector3(0, 0.7, -2.6),
   ) {
     this.camera = new UniversalCamera("ThirdPersonCamera", position, scene)
     this.camera.fov = 1.25
@@ -27,19 +29,16 @@ export class ThirdPersonCamera implements Disposable {
     this.camera.applyGravity = true
     this.camera.checkCollisions = true
     this.camera.inputs.clear()
-    this.canvas = scene.getEngine().getRenderingCanvas()
     this.camera.parent = target
     this.target = target
+    this.engine = scene.getEngine()
+    this.canvas = this.engine.getRenderingCanvas()
     this.setupPointerLock()
   }
 
   public update() {
     this.target.rotation.x = Tools.ToRadians(this.mouseY)
     this.target.rotation.y = Tools.ToRadians(this.mouseX)
-  }
-
-  public reset() {
-    this.mouseX = 0
   }
 
   public dispose(): void {
