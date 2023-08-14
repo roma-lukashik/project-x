@@ -20,7 +20,6 @@ export class JumpInRunState implements State {
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.run))
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.followCamera()
-      this.player.updateMoveDirection()
     })
   }
 

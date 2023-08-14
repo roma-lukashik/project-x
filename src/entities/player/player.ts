@@ -24,7 +24,6 @@ export class Player implements Entity {
   public readonly walkingSpeed = 0.01
   public readonly runningSpeed = this.walkingSpeed * 4
 
-  public readonly previousRotation = Vector3.Zero()
   public readonly gravity = Vector3.Zero()
   public readonly moveDirection = Vector3.Zero()
 
@@ -52,13 +51,10 @@ export class Player implements Entity {
     this.observer = scene.onBeforeRenderObservable.add(() => {
       this.stateController.update()
       this.camera.update()
+      this.updateMoveDirection()
       this.updateGroundDetection()
       this.applyGravity()
     })
-  }
-
-  public updateMoveDirection() {
-    this.moveDirection.copyFrom(this.mesh.forward).normalize().scaleInPlace(this.speed)
   }
 
   public idle(): WeightedAnimationGroup {
@@ -107,6 +103,10 @@ export class Player implements Entity {
 
   private getAnimationGroup(animationName: PlayerAnimation) {
     return getAnimationGroupByName(animationName, this.scene)
+  }
+
+  private updateMoveDirection() {
+    this.moveDirection.copyFrom(this.mesh.forward).normalize().scaleInPlace(this.speed)
   }
 
   private updateGroundDetection() {

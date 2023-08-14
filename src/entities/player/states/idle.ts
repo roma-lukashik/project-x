@@ -12,11 +12,9 @@ export class IdleState implements State {
   public onEnter() {
     this.player.idle()
     this.player.speed = 0
-    this.player.updateMoveDirection()
   }
 
   public onExit() {
-    this.player.previousRotation.copyFrom(this.player.mesh.rotation)
   }
 
   public update(controller: PlayerStateController) {

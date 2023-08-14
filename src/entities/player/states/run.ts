@@ -23,7 +23,6 @@ export class RunState implements State {
     this.observer = this.scene.onBeforeRenderObservable.add(() => {
       this.player.speed = Scalar.Lerp(initialSpeed, this.player.runningSpeed, animation.getWeight())
       this.player.followCamera()
-      this.player.updateMoveDirection()
     })
   }
 
