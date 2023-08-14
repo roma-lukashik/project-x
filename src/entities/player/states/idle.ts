@@ -11,7 +11,7 @@ export class IdleState implements State {
 
   public onEnter() {
     this.player.idle()
-    this.player.speed = 0
+    this.player.setSpeed(0)
   }
 
   public onExit() {

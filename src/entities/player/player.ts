@@ -14,15 +14,15 @@ import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
 import { floorRayCast } from "../../utils/math"
 
 export class Player implements Entity {
-  private static readonly meshName = "__root__"
-  private static readonly gravity = -9.8
+  public static readonly walkingSpeed = 0.01
+  public static readonly runningSpeed = Player.walkingSpeed * 4
 
-  public speed = 0
+  private static readonly meshName = "__root__"
+  private static readonly acceleration = 0.0005
+  private static readonly gravity = -9.8
 
   public readonly mesh: Mesh
   public readonly cameraTarget: TransformNode
-  public readonly walkingSpeed = 0.01
-  public readonly runningSpeed = this.walkingSpeed * 4
 
   public readonly gravity = Vector3.Zero()
   public readonly moveDirection = Vector3.Zero()
@@ -32,6 +32,8 @@ export class Player implements Entity {
   private readonly animationController: AnimationController
   private readonly camera: ThirdPersonCamera
   private grounded = false
+  private speed = 0
+  private desiredSpeed = 0
 
   public constructor(
     private readonly name: string,
@@ -46,14 +48,16 @@ export class Player implements Entity {
     this.cameraTarget.position.y = 0.9
     this.camera = new ThirdPersonCamera(this.scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
-    this.stateController = new PlayerStateController(this, scene)
+    this.stateController = new PlayerStateController(this)
     this.stateController.change(this.stateController.idle)
     this.observer = scene.onBeforeRenderObservable.add(() => {
       this.stateController.update()
       this.camera.update()
+      this.updateSpeed()
       this.updateMoveDirection()
       this.updateGroundDetection()
       this.applyGravity()
+      this.followCamera()
     })
   }
 
@@ -77,9 +81,8 @@ export class Player implements Entity {
     return this.runAnimationOnce(PlayerAnimation.JumpInRun)
   }
 
-  public followCamera(): void {
-    this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
-    this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.15)
+  public setSpeed(speed: number): void {
+    this.desiredSpeed = speed
   }
 
   public dispose(): void {
@@ -105,6 +108,17 @@ export class Player implements Entity {
     return getAnimationGroupByName(animationName, this.scene)
   }
 
+  private updateSpeed() {
+    if (this.speed === this.desiredSpeed) {
+      return
+    }
+    if (this.speed > this.desiredSpeed) {
+      this.speed = Math.max(this.desiredSpeed, this.speed - Player.acceleration)
+    } else {
+      this.speed = Math.min(this.desiredSpeed, this.speed + Player.acceleration)
+    }
+  }
+
   private updateMoveDirection() {
     this.moveDirection.copyFrom(this.mesh.forward).normalize().scaleInPlace(this.speed)
   }
@@ -122,5 +136,12 @@ export class Player implements Entity {
     }
     this.moveDirection.addInPlace(this.gravity)
     this.mesh.moveWithCollisions(this.moveDirection)
+  }
+
+  private followCamera(): void {
+    if (this.speed > 0) {
+      this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
+      this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.15)
+    }
   }
 }

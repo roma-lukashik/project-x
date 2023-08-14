@@ -1,4 +1,3 @@
-import type { Scene } from "@babylonjs/core/scene"
 import { StateController } from "../../state/controller"
 import type { State } from "../../state/state"
 import type { Player } from "./player"
@@ -17,13 +16,13 @@ export class PlayerStateController extends StateController {
   public readonly jumpInWalk: State
   public readonly jumpInRun: State
 
-  public constructor(player: Player, scene: Scene) {
+  public constructor(player: Player) {
     super()
     this.idle = new IdleState(player)
-    this.walk = new WalkState(player, scene)
-    this.run = new RunState(player, scene)
+    this.walk = new WalkState(player)
+    this.run = new RunState(player)
     this.jump = new JumpState(player)
-    this.jumpInWalk = new JumpInWalkState(player, scene)
-    this.jumpInRun = new JumpInRunState(player, scene)
+    this.jumpInWalk = new JumpInWalkState(player)
+    this.jumpInRun = new JumpInRunState(player)
   }
 }
