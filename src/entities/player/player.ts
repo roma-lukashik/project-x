@@ -12,6 +12,7 @@ import { ThirdPersonCamera } from "../../cameras/thirdPerson"
 import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
 import { floorRayCast } from "../../utils/math"
+import { SpeedController } from "../../controllers/speed"
 
 export class Player implements Entity {
   public static readonly walkingSpeed = 0.01
@@ -30,10 +31,9 @@ export class Player implements Entity {
   private readonly observer: Nullable<Observer<Scene>>
   private readonly stateController: PlayerStateController
   private readonly animationController: AnimationController
+  private readonly speedController: SpeedController
   private readonly camera: ThirdPersonCamera
   private grounded = false
-  private speed = 0
-  private desiredSpeed = 0
 
   public constructor(
     private readonly name: string,
@@ -48,17 +48,10 @@ export class Player implements Entity {
     this.cameraTarget.position.y = 0.9
     this.camera = new ThirdPersonCamera(this.scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
+    this.speedController = new SpeedController(Player.acceleration)
     this.stateController = new PlayerStateController(this)
     this.stateController.change(this.stateController.idle)
-    this.observer = scene.onBeforeRenderObservable.add(() => {
-      this.stateController.update()
-      this.camera.update()
-      this.updateSpeed()
-      this.updateMoveDirection()
-      this.updateGroundDetection()
-      this.applyGravity()
-      this.followCamera()
-    })
+    this.observer = scene.onBeforeRenderObservable.add(() => this.beforeRenderStep())
   }
 
   public idle(): WeightedAnimationGroup {
@@ -82,13 +75,23 @@ export class Player implements Entity {
   }
 
   public setSpeed(speed: number): void {
-    this.desiredSpeed = speed
+    this.speedController.setSpeed(speed)
   }
 
   public dispose(): void {
     this.scene.onBeforeRenderObservable.remove(this.observer)
     this.animationController.dispose()
     this.mesh.dispose()
+  }
+
+  private beforeRenderStep() {
+    this.stateController.update()
+    this.camera.update()
+    this.speedController.updateSpeed()
+    this.updateMoveDirection()
+    this.updateGroundDetection()
+    this.applyGravity()
+    this.followCamera()
   }
 
   private runAnimationLoop(animationName: PlayerAnimation) {
@@ -108,19 +111,8 @@ export class Player implements Entity {
     return getAnimationGroupByName(animationName, this.scene)
   }
 
-  private updateSpeed() {
-    if (this.speed === this.desiredSpeed) {
-      return
-    }
-    if (this.speed > this.desiredSpeed) {
-      this.speed = Math.max(this.desiredSpeed, this.speed - Player.acceleration)
-    } else {
-      this.speed = Math.min(this.desiredSpeed, this.speed + Player.acceleration)
-    }
-  }
-
   private updateMoveDirection() {
-    this.moveDirection.copyFrom(this.mesh.forward).normalize().scaleInPlace(this.speed)
+    this.moveDirection.copyFrom(this.mesh.forward).scaleInPlace(this.speedController.getSpeed())
   }
 
   private updateGroundDetection() {
@@ -139,7 +131,7 @@ export class Player implements Entity {
   }
 
   private followCamera(): void {
-    if (this.speed > 0) {
+    if (this.speedController.getSpeed() > 0) {
       this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
       this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.15)
     }
