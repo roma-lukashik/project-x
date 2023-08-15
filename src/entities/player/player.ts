@@ -2,7 +2,7 @@ import { Scene } from "@babylonjs/core/scene"
 import { getAnimationGroupByName, getMeshByName } from "../../utils/scene"
 import { PlayerStateController } from "./controller"
 import { Observer } from "@babylonjs/core/Misc"
-import { Nullable } from "@babylonjs/core/types"
+import { DeepImmutable, Nullable } from "@babylonjs/core/types"
 import { Entity } from "../entity"
 import { CreateCapsule, Mesh, TransformNode } from "@babylonjs/core/Meshes"
 import { AnimationController } from "../../animation/controller"
@@ -17,22 +17,24 @@ import { SpeedController } from "../../controllers/speed"
 export class Player implements Entity {
   public static readonly walkingSpeed = 0.01
   public static readonly runningSpeed = Player.walkingSpeed * 4
+  public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
+  public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
+  public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -3)
 
   private static readonly meshName = "__root__"
   private static readonly acceleration = 0.0005
   private static readonly gravity = -9.8
 
   public readonly mesh: Mesh
-  public readonly cameraTarget: TransformNode
-
-  public readonly gravity = Vector3.Zero()
-  public readonly moveDirection = Vector3.Zero()
+  public readonly camera: ThirdPersonCamera
 
   private readonly observer: Nullable<Observer<Scene>>
   private readonly stateController: PlayerStateController
   private readonly animationController: AnimationController
   private readonly speedController: SpeedController
-  private readonly camera: ThirdPersonCamera
+  private readonly cameraTarget: TransformNode
+  private readonly gravity = Vector3.Zero()
+  private readonly moveDirection = Vector3.Zero()
   private grounded = false
 
   public constructor(
@@ -133,7 +135,7 @@ export class Player implements Entity {
   private followCamera(): void {
     if (this.speedController.getSpeed() > 0) {
       this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
-      this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.15)
+      this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.12)
     }
   }
 }

@@ -12,6 +12,7 @@ export class ThirdPersonCamera implements Disposable {
   private readonly engine: Engine
   private readonly canvas: Nullable<HTMLCanvasElement>
   private readonly target: TransformNode
+  private readonly position: Vector3
   private readonly minY = -25
   private readonly maxY = 35
   private readonly cameraSpeed = 0.1
@@ -24,7 +25,7 @@ export class ThirdPersonCamera implements Disposable {
     position = new Vector3(0, 0.7, -2.6),
   ) {
     this.camera = new UniversalCamera("ThirdPersonCamera", position, scene)
-    this.camera.fov = 1.25
+    this.camera.fov = 1.2
     this.camera.minZ = 0
     this.camera.applyGravity = true
     this.camera.checkCollisions = true
@@ -33,17 +34,31 @@ export class ThirdPersonCamera implements Disposable {
     this.target = target
     this.engine = scene.getEngine()
     this.canvas = this.engine.getRenderingCanvas()
+    this.position = this.camera.position
     this.setupPointerLock()
   }
 
   public update() {
-    this.target.rotation.x = Tools.ToRadians(this.mouseY)
-    this.target.rotation.y = Tools.ToRadians(this.mouseX)
+    this.updateFromInput()
+    this.updateCameraPosition()
+  }
+
+  public setPosition(position: Vector3): void {
+    this.position.copyFrom(position)
   }
 
   public dispose(): void {
     document.removeEventListener("pointerlockchange", this.onPointerLockChange, false)
     this.canvas?.removeEventListener("click", this.canvas.requestPointerLock)
+  }
+
+  private updateCameraPosition() {
+    this.camera.position = Vector3.Lerp(this.camera.position, this.position, 0.05)
+  }
+
+  private updateFromInput() {
+    this.target.rotation.x = Tools.ToRadians(this.mouseY)
+    this.target.rotation.y = Tools.ToRadians(this.mouseX)
   }
 
   private setupPointerLock() {

@@ -12,6 +12,7 @@ export class IdleState implements State {
   public onEnter() {
     this.player.idle()
     this.player.setSpeed(0)
+    this.player.camera.setPosition(Player.idleCameraPosition)
   }
 
   public onExit() {

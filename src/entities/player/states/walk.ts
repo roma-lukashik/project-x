@@ -12,6 +12,7 @@ export class WalkState implements State {
   public onEnter() {
     this.player.walk()
     this.player.setSpeed(Player.walkingSpeed)
+    this.player.camera.setPosition(Player.walkCameraPosition)
   }
 
   public onExit() {
