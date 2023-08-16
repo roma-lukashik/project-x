@@ -10,9 +10,10 @@ export class JumpInRunState implements State {
 
   public onEnter(controller: PlayerStateController) {
     const jumpInRun = this.player.jumpInRun()
-    this.player.setSpeed(Player.runningSpeed)
-    this.player.camera.setPosition(Player.runCameraPosition)
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.run))
+    this.player.setSpeed(Player.runningSpeed)
+    this.player.setMoving(true)
+    this.player.camera.setPosition(Player.runCameraPosition)
   }
 
   public onExit() {

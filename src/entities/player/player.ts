@@ -36,6 +36,7 @@ export class Player implements Entity {
   private readonly gravity = Vector3.Zero()
   private readonly moveDirection = Vector3.Zero()
   private grounded = false
+  private moving = false
 
   public constructor(
     private readonly name: string,
@@ -80,6 +81,10 @@ export class Player implements Entity {
     this.speedController.setSpeed(speed)
   }
 
+  public setMoving(moving: boolean): void {
+    this.moving = moving
+  }
+
   public dispose(): void {
     this.scene.onBeforeRenderObservable.remove(this.observer)
     this.animationController.dispose()
@@ -89,7 +94,7 @@ export class Player implements Entity {
   private beforeRenderStep() {
     this.stateController.update()
     this.camera.update()
-    this.speedController.updateSpeed()
+    this.speedController.update()
     this.updateMoveDirection()
     this.updateGroundDetection()
     this.applyGravity()
@@ -133,8 +138,8 @@ export class Player implements Entity {
   }
 
   private followCamera(): void {
-    if (this.speedController.getSpeed() > 0) {
-      this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
+    this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
+    if (this.moving) {
       this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.12)
     }
   }

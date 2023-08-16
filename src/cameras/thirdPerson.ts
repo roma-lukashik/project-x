@@ -53,7 +53,7 @@ export class ThirdPersonCamera implements Disposable {
   }
 
   private updateCameraPosition() {
-    this.camera.position = Vector3.Lerp(this.camera.position, this.position, 0.05)
+    this.camera.position = Vector3.Lerp(this.camera.position, this.position, 0.04)
   }
 
   private updateFromInput() {

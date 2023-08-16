@@ -13,7 +13,7 @@ export class SpeedController {
     this.maxSpeed = speed
   }
 
-  public updateSpeed(): void {
+  public update(): void {
     if (this.speed === this.maxSpeed) {
       return
     }

@@ -12,6 +12,7 @@ export class RunState implements State {
   public onEnter() {
     this.player.run()
     this.player.setSpeed(Player.runningSpeed)
+    this.player.setMoving(true)
     this.player.camera.setPosition(Player.runCameraPosition)
   }
 
