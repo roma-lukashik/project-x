@@ -13,6 +13,7 @@ export class JumpState implements State {
     jump.onAnimationEndObservable.addOnce(() => controller.change(controller.idle))
     this.player.camera.setPosition(Player.idleCameraPosition)
     this.player.setMoving(false)
+    this.player.setJumpSpeed(Player.jumpingSpeed)
   }
 
   public onExit() {

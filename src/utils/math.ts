@@ -3,10 +3,11 @@ import type { Scene } from "@babylonjs/core/scene"
 import { Ray } from "@babylonjs/core/Culling"
 import { Vector3 } from "@babylonjs/core/Maths"
 
-const Vector3Down = Vector3.Up().scaleInPlace(-1)
+const ray = new Ray(Vector3.Zero(), Vector3.Down())
 
 export function floorRayCast(targetMesh: AbstractMesh, scene: Scene, rayCastLength: number): boolean {
-  const ray = new Ray(targetMesh.position, Vector3Down, rayCastLength)
-  const pick = scene.pickWithRay(ray, (mesh) => mesh.isPickable && mesh.isEnabled())
+  ray.origin.copyFrom(targetMesh.position).addInPlaceFromFloats(0, -0.9, 0)
+  ray.length = rayCastLength
+  const pick = scene.pickWithRay(ray, (mesh) => mesh !== targetMesh && mesh.isPickable && mesh.isEnabled())
   return !!pick?.hit
 }

@@ -13,6 +13,7 @@ export class JumpInWalkState implements State {
     jumpInRun.onAnimationEndObservable.addOnce(() => controller.change(controller.walk))
     this.player.setSpeed(Player.walkingSpeed)
     this.player.setMoving(true)
+    this.player.setJumpSpeed(Player.jumpingSpeed)
     this.player.camera.setPosition(Player.walkCameraPosition)
   }
 

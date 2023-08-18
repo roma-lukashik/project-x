@@ -17,6 +17,7 @@ import { SpeedController } from "../../controllers/speed"
 export class Player implements Entity {
   public static readonly walkingSpeed = 0.01
   public static readonly runningSpeed = Player.walkingSpeed * 4
+  public static readonly jumpingSpeed = 4
   public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
   public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
   public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -3)
@@ -33,8 +34,10 @@ export class Player implements Entity {
   private readonly animationController: AnimationController
   private readonly speedController: SpeedController
   private readonly cameraTarget: TransformNode
-  private readonly gravity = Vector3.Zero()
-  private readonly moveDirection = Vector3.Zero()
+  private readonly moveVector = Vector3.Zero()
+
+  private jumpSpeed = 0
+  private fallSpeed = 0
   private grounded = false
   private moving = false
 
@@ -42,14 +45,10 @@ export class Player implements Entity {
     private readonly name: string,
     private readonly scene: Scene,
   ) {
-    this.mesh = CreateCapsule(this.name, { radius: 0.3, height: 1.8 })
-    this.mesh.visibility = 0.0
-    this.mesh.position.y = 0.9
-    this.mesh.ellipsoid = new Vector3(0.3, 0.9, 0.3)
-    this.mesh.addChild(getMeshByName(Player.meshName, scene))
+    this.mesh = this.createMeshCollider()
     this.cameraTarget = new TransformNode(this.name + "CameraTarget", scene)
-    this.cameraTarget.position.y = 0.9
-    this.camera = new ThirdPersonCamera(this.scene, this.cameraTarget)
+    this.cameraTarget.position.y = this.mesh.position.y
+    this.camera = new ThirdPersonCamera(scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
     this.speedController = new SpeedController(Player.acceleration)
     this.stateController = new PlayerStateController(this)
@@ -81,6 +80,10 @@ export class Player implements Entity {
     this.speedController.setSpeed(speed)
   }
 
+  public setJumpSpeed(speed: number): void {
+    this.jumpSpeed = speed
+  }
+
   public setMoving(moving: boolean): void {
     this.moving = moving
   }
@@ -89,6 +92,20 @@ export class Player implements Entity {
     this.scene.onBeforeRenderObservable.remove(this.observer)
     this.animationController.dispose()
     this.mesh.dispose()
+  }
+
+  private createMeshCollider(): Mesh {
+    const player = getMeshByName(Player.meshName, this.scene)
+    const { min, max } = player.getHierarchyBoundingVectors()
+    const height = max.y - min.y
+    const radius = 0.35
+    const mesh = CreateCapsule(this.name, { radius, height })
+    mesh.visibility = 0.0
+    mesh.position.y = height / 2
+    mesh.ellipsoid = new Vector3(radius, height / 2, radius)
+    mesh.addChild(player)
+    mesh.getChildMeshes().forEach((child) => child.isPickable = false)
+    return mesh
   }
 
   private beforeRenderStep() {
@@ -119,7 +136,7 @@ export class Player implements Entity {
   }
 
   private updateMoveDirection() {
-    this.moveDirection.copyFrom(this.mesh.forward).scaleInPlace(this.speedController.getSpeed())
+    this.moveVector.copyFrom(this.mesh.forward).scaleInPlace(this.speedController.getSpeed())
   }
 
   private updateGroundDetection() {
@@ -128,17 +145,23 @@ export class Player implements Entity {
 
   private applyGravity() {
     const dt = this.scene.getEngine().getDeltaTime() / 1000.0
-    if (this.grounded) {
-      this.gravity.y = 0
+
+    if (this.jumpSpeed > 0) {
+      this.jumpSpeed += Player.gravity * dt
+      this.moveVector.addInPlaceFromFloats(0, this.jumpSpeed * dt + 0.5 * Player.gravity * dt * dt, 0)
+    } else if (!this.grounded) {
+      this.fallSpeed += Player.gravity * dt
+      this.moveVector.addInPlaceFromFloats(0, this.fallSpeed * dt + 0.5 * Player.gravity * dt * dt, 0)
     } else {
-      this.gravity.y += dt * Player.gravity
+      this.fallSpeed = 0
+      this.jumpSpeed = 0
     }
-    this.moveDirection.addInPlace(this.gravity)
-    this.mesh.moveWithCollisions(this.moveDirection)
+
+    this.mesh.moveWithCollisions(this.moveVector)
   }
 
   private followCamera(): void {
-    this.cameraTarget.position = Vector3.Lerp(this.cameraTarget.position, this.mesh.position, 0.4)
+    Vector3.LerpToRef(this.cameraTarget.position, this.mesh.position, 0.4, this.cameraTarget.position)
     if (this.moving) {
       this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.12)
     }
