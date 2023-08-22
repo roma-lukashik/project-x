@@ -11,6 +11,7 @@ import { Player } from "./entities/player/player"
 import { InputController } from "./controllers/input"
 import { Box } from "./entities/box/box"
 import { Terrain } from "./entities/terrain/terrain"
+import { Pistol } from "./entities/pistol/pistol"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -37,9 +38,15 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
   const light = createSunLight(scene)
   new Terrain(scene, 100)
   const player = new Player("Player", scene)
+  const gun = new Pistol("Pistol", scene)
   const box = new Box(scene)
   const shadow = initialiseShadow(light)
-  shadow.addShadowCaster(player.mesh).addShadowCaster(box.mesh)
+  shadow
+    .addShadowCaster(player.mesh)
+    .addShadowCaster(box.mesh)
+    .addShadowCaster(gun.mesh)
+
+  gun.attach(player.rightHand, player.transformNode)
 
   Inspector.Show(scene, {})
 
@@ -57,13 +64,16 @@ function createAmbientLight(scene: Scene) {
 }
 
 function createSunLight(scene: Scene) {
-  const light = new DirectionalLight("directionalLight", new Vector3(0.5, -0.5, -1.0), scene)
+  const light = new DirectionalLight("directionalLight", new Vector3(0, -10, -10).normalize(), scene)
   light.position = new Vector3(0, 10, 10)
   return light
 }
 
 async function loadMeshes(scene: Scene) {
   await SceneLoader.ImportMeshAsync("", "/", "player.gltf", scene)
+  await SceneLoader.ImportMeshAsync("", "/", "gun.gltf", scene).then((result) => {
+    result.meshes[0].name = "Pistol"
+  })
   await Promise.all([
     loadAnimation(scene, "walk"),
     loadAnimation(scene, "run"),

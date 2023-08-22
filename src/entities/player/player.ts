@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { getAnimationGroupByName, getMeshByName } from "../../utils/scene"
+import { getAnimationGroupByName, getBoneByName, getMeshByName } from "../../utils/scene"
 import { PlayerStateController } from "./controller"
 import { Observer } from "@babylonjs/core/Misc"
 import { DeepImmutable, Nullable } from "@babylonjs/core/types"
@@ -13,6 +13,7 @@ import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
 import { floorRayCast } from "../../utils/math"
 import { SpeedController } from "../../controllers/speed"
+import { Bone } from "@babylonjs/core/Bones"
 
 export class Player implements Entity {
   public static readonly walkingSpeed = 0.01
@@ -23,11 +24,14 @@ export class Player implements Entity {
   public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -3)
 
   private static readonly meshName = "__root__"
+  private static readonly rightHandMeshName = "mixamorig:RightHand"
   private static readonly acceleration = 0.0005
   private static readonly gravity = -9.8
 
   public readonly mesh: Mesh
   public readonly camera: ThirdPersonCamera
+  public readonly rightHand: Bone
+  public readonly transformNode: TransformNode
 
   private readonly observer: Nullable<Observer<Scene>>
   private readonly stateController: PlayerStateController
@@ -52,6 +56,8 @@ export class Player implements Entity {
     this.animationController = new AnimationController(scene)
     this.speedController = new SpeedController(Player.acceleration)
     this.stateController = new PlayerStateController(this)
+    this.rightHand = getBoneByName(Player.rightHandMeshName, scene)
+    this.transformNode = scene.getTransformNodeByName("Alpha_Joints")!
     this.stateController.change(this.stateController.idle)
     this.observer = scene.onBeforeRenderObservable.add(() => this.beforeRenderStep())
   }
