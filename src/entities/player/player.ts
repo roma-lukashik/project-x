@@ -151,7 +151,6 @@ export class Player implements Entity {
 
   private applyGravity() {
     const dt = this.scene.getEngine().getDeltaTime() / 1000.0
-
     if (this.jumpSpeed > 0) {
       this.jumpSpeed += Player.gravity * dt
       this.moveVector.addInPlaceFromFloats(0, this.jumpSpeed * dt + 0.5 * Player.gravity * dt * dt, 0)
@@ -162,7 +161,6 @@ export class Player implements Entity {
       this.fallSpeed = 0
       this.jumpSpeed = 0
     }
-
     this.mesh.moveWithCollisions(this.moveVector)
   }
 

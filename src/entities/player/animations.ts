@@ -4,4 +4,5 @@ export enum PlayerAnimation {
   Run = "Run",
   JumpInPlace = "JumpInPlace",
   JumpInRun = "JumpInRun",
+  PistolIdle = "PistolIdle",
 }

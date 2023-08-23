@@ -80,6 +80,7 @@ async function loadMeshes(scene: Scene) {
     loadAnimation(scene, "jumpInPlace"),
     loadAnimation(scene, "jumpInRun"),
     loadAnimation(scene, "idle"),
+    loadAnimation(scene, "pistolIdle"),
   ])
 }
 

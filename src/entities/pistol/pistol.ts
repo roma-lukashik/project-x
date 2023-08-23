@@ -21,7 +21,7 @@ export class Pistol implements Entity {
   public attach(bone: Bone, transformNode: TransformNode): void {
     this.mesh.scaling = new Vector3(100, 100, 100)
     this.mesh.rotation = new Vector3(-Math.PI / 2, Math.PI / 2, Math.PI)
-    this.mesh.position = new Vector3(5, 10, 0)
+    this.mesh.position = new Vector3(3.5, 10, 2)
     this.mesh.attachToBone(bone, transformNode)
   }
 
