@@ -16,7 +16,7 @@ import { SpeedController } from "../../controllers/speed"
 import { Bone } from "@babylonjs/core/Bones"
 
 export class Player implements Entity {
-  public static readonly walkingSpeed = 0.01
+  public static readonly walkingSpeed = 1.11
   public static readonly runningSpeed = Player.walkingSpeed * 4
   public static readonly jumpingSpeed = 4
   public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
@@ -25,7 +25,7 @@ export class Player implements Entity {
 
   private static readonly meshName = "__root__"
   private static readonly rightHandMeshName = "mixamorig:RightHand"
-  private static readonly acceleration = 0.0005
+  private static readonly acceleration = 6
   private static readonly gravity = -9.8
 
   public readonly mesh: Mesh
@@ -54,7 +54,7 @@ export class Player implements Entity {
     this.cameraTarget.position.y = this.mesh.position.y
     this.camera = new ThirdPersonCamera(scene, this.cameraTarget)
     this.animationController = new AnimationController(scene)
-    this.speedController = new SpeedController(Player.acceleration)
+    this.speedController = new SpeedController(scene, Player.acceleration)
     this.stateController = new PlayerStateController(this)
     this.rightHand = getBoneByName(Player.rightHandMeshName, scene)
     this.transformNode = scene.getTransformNodeByName("Alpha_Joints")!
@@ -142,7 +142,9 @@ export class Player implements Entity {
   }
 
   private updateMoveDirection() {
-    this.moveVector.copyFrom(this.mesh.forward).scaleInPlace(this.speedController.getSpeed())
+    const dt = this.scene.getEngine().getDeltaTime() / 1000.0
+    this.moveVector.copyFrom(this.mesh.forward)
+      .scaleInPlace(this.speedController.getSpeed() * dt + 0.5 * Player.acceleration * dt * dt)
   }
 
   private updateGroundDetection() {
