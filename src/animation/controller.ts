@@ -11,7 +11,7 @@ export class AnimationController {
 
   public constructor(
     private readonly scene: Scene,
-    private readonly step = 0.01,
+    private readonly step = 0.025,
   ) {
     this.observer = this.scene.onBeforeRenderObservable.add(this.changeAnimationsWeights)
   }
