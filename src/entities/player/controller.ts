@@ -7,9 +7,11 @@ import { RunState } from "./states/run"
 import { JumpState } from "./states/jump"
 import { JumpInWalkState } from "./states/jumpInWalk"
 import { JumpInRunState } from "./states/jumpInRun"
+import { AimState } from "./states/aim"
 
 export class PlayerStateController extends StateController {
   public readonly idle: State
+  public readonly aim: State
   public readonly walk: State
   public readonly run: State
   public readonly jump: State
@@ -19,6 +21,7 @@ export class PlayerStateController extends StateController {
   public constructor(player: Player) {
     super()
     this.idle = new IdleState(player)
+    this.aim = new AimState(player)
     this.walk = new WalkState(player)
     this.run = new RunState(player)
     this.jump = new JumpState(player)

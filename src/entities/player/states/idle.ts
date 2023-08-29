@@ -12,7 +12,7 @@ export class IdleState implements State {
   public onEnter() {
     this.player.idle()
     this.player.setSpeed(0)
-    this.player.setMoving(false)
+    this.player.setFollowCamera(false)
     this.player.camera.setPosition(Player.idleCameraPosition)
   }
 
@@ -28,6 +28,8 @@ export class IdleState implements State {
       }
     } else if (InputController.getKey(KeyboardKey.Space)) {
       controller.change(controller.jump)
+    } else if (InputController.getKey(KeyboardKey.Command)) {
+      controller.change(controller.aim)
     }
   }
 }

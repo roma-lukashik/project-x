@@ -46,7 +46,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
     .addShadowCaster(box.mesh)
     .addShadowCaster(gun.mesh)
 
-  gun.attach(player.rightHand, player.transformNode)
+  gun.attach(player.rightHand.bone, player.transformNode)
 
   Inspector.Show(scene, {})
 

@@ -12,7 +12,7 @@ export class JumpState implements State {
     const jump = this.player.jump()
     jump.onAnimationEndObservable.addOnce(() => controller.change(controller.idle))
     this.player.camera.setPosition(Player.idleCameraPosition)
-    this.player.setMoving(false)
+    this.player.setFollowCamera(false)
     setTimeout(() => this.player.setJumpSpeed(Player.jumpingSpeed), 700)
   }
 

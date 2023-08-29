@@ -1,5 +1,5 @@
 import { Scene } from "@babylonjs/core/scene"
-import { getAnimationGroupByName, getBoneByName, getMeshByName } from "../../utils/scene"
+import { getAnimationGroupByName, getMeshByName } from "../../utils/scene"
 import { PlayerStateController } from "./controller"
 import { Observer } from "@babylonjs/core/Misc"
 import { DeepImmutable, Nullable } from "@babylonjs/core/types"
@@ -13,24 +13,28 @@ import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { WeightedAnimationGroup } from "../../animation/weightedAnimationGroup"
 import { floorRayCast } from "../../utils/math"
 import { SpeedController } from "../../controllers/speed"
-import { Bone } from "@babylonjs/core/Bones"
+import { PlayerIKController } from "./playerIKController"
+import { IKController } from "../../controllers/ikController"
 
 export class Player implements Entity {
   public static readonly walkingSpeed = 1.11
   public static readonly runningSpeed = Player.walkingSpeed * 4
   public static readonly jumpingSpeed = 4
-  public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
-  public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
-  public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -3)
+  public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.2)
+  public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
+  public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
+  public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.5, 0.7, -1.5)
 
   private static readonly meshName = "__root__"
   private static readonly rightHandMeshName = "mixamorig:RightHand"
-  private static readonly acceleration = 6
+  private static readonly leftHandMeshName = "mixamorig:LeftHand"
+  private static readonly acceleration = 10
   private static readonly gravity = -9.8
 
   public readonly mesh: Mesh
   public readonly camera: ThirdPersonCamera
-  public readonly rightHand: Bone
+  public readonly rightHand: IKController
+  public readonly leftHand: IKController
   public readonly transformNode: TransformNode
 
   private readonly observer: Nullable<Observer<Scene>>
@@ -43,7 +47,7 @@ export class Player implements Entity {
   private jumpSpeed = 0
   private fallSpeed = 0
   private grounded = false
-  private moving = false
+  private followCamera = false
 
   public constructor(
     private readonly name: string,
@@ -56,7 +60,8 @@ export class Player implements Entity {
     this.animationController = new AnimationController(scene)
     this.speedController = new SpeedController(scene, Player.acceleration)
     this.stateController = new PlayerStateController(this)
-    this.rightHand = getBoneByName(Player.rightHandMeshName, scene)
+    this.rightHand = new PlayerIKController(scene, this.mesh, Player.rightHandMeshName)
+    this.leftHand = new PlayerIKController(scene, this.mesh, Player.leftHandMeshName)
     this.transformNode = scene.getTransformNodeByName("Alpha_Joints")!
     this.stateController.change(this.stateController.idle)
     this.observer = scene.onBeforeRenderObservable.add(() => this.beforeRenderStep())
@@ -64,6 +69,10 @@ export class Player implements Entity {
 
   public idle(): WeightedAnimationGroup {
     return this.runAnimationLoop(PlayerAnimation.Idle)
+  }
+
+  public aiming(): WeightedAnimationGroup {
+    return this.runAnimationLoop(PlayerAnimation.PistolIdle)
   }
 
   public walk(): WeightedAnimationGroup {
@@ -90,8 +99,8 @@ export class Player implements Entity {
     this.jumpSpeed = speed
   }
 
-  public setMoving(moving: boolean): void {
-    this.moving = moving
+  public setFollowCamera(followCamera: boolean): void {
+    this.followCamera = followCamera
   }
 
   public dispose(): void {
@@ -121,7 +130,7 @@ export class Player implements Entity {
     this.updateMoveDirection()
     this.updateGroundDetection()
     this.applyGravity()
-    this.followCamera()
+    this.applyFollowingCamera()
   }
 
   private runAnimationLoop(animationName: PlayerAnimation) {
@@ -166,9 +175,9 @@ export class Player implements Entity {
     this.mesh.moveWithCollisions(this.moveVector)
   }
 
-  private followCamera(): void {
+  private applyFollowingCamera(): void {
     Vector3.LerpToRef(this.cameraTarget.position, this.mesh.position, 0.4, this.cameraTarget.position)
-    if (this.moving) {
+    if (this.followCamera) {
       this.mesh.rotation.y = Scalar.Lerp(this.mesh.rotation.y, this.cameraTarget.rotation.y, 0.12)
     }
   }
