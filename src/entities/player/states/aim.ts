@@ -3,6 +3,7 @@ import { Player } from "../player"
 import { InputController, KeyboardKey } from "../../../controllers/input"
 import { PlayerStateController } from "../controller"
 import { Vector3 } from "@babylonjs/core/Maths"
+import { PointerInput } from "@babylonjs/core/DeviceInput"
 
 export class AimState implements State {
   public constructor(
@@ -26,9 +27,15 @@ export class AimState implements State {
   public update(controller: PlayerStateController) {
     if (!InputController.getKey(KeyboardKey.Command)) {
       controller.change(controller.idle)
-    } else {
+      return
+    }
+    if (InputController.getMouseKey(PointerInput.LeftClick)) {
       this.player.rightHand.update()
       this.player.leftHand.update()
+      controller.change(controller.shoot)
+      return
     }
+    this.player.rightHand.update()
+    this.player.leftHand.update()
   }
 }

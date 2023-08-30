@@ -23,7 +23,7 @@ export class Player implements Entity {
   public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.2)
   public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
   public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
-  public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.5, 0.7, -1.5)
+  public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.6, 0.7, -1.5)
 
   private static readonly meshName = "__root__"
   private static readonly rightHandMeshName = "mixamorig:RightHand"
@@ -57,11 +57,11 @@ export class Player implements Entity {
     this.cameraTarget = new TransformNode(this.name + "CameraTarget", scene)
     this.cameraTarget.position.y = this.mesh.position.y
     this.camera = new ThirdPersonCamera(scene, this.cameraTarget)
-    this.animationController = new AnimationController(scene)
-    this.speedController = new SpeedController(scene, Player.acceleration)
-    this.stateController = new PlayerStateController(this)
     this.rightHand = new PlayerIKController(scene, this.mesh, Player.rightHandMeshName)
     this.leftHand = new PlayerIKController(scene, this.mesh, Player.leftHandMeshName)
+    this.animationController = new AnimationController(scene)
+    this.speedController = new SpeedController(scene, Player.acceleration)
+    this.stateController = new PlayerStateController(this, scene)
     this.transformNode = scene.getTransformNodeByName("Alpha_Joints")!
     this.stateController.change(this.stateController.idle)
     this.observer = scene.onBeforeRenderObservable.add(() => this.beforeRenderStep())
@@ -152,8 +152,12 @@ export class Player implements Entity {
 
   private updateMoveDirection() {
     const dt = this.scene.getEngine().getDeltaTime() / 1000.0
-    this.moveVector.copyFrom(this.mesh.forward)
-      .scaleInPlace(this.speedController.getSpeed() * dt + 0.5 * Player.acceleration * dt * dt)
+    if (this.speedController.getSpeed() > 0) {
+      this.moveVector.copyFrom(this.mesh.forward)
+        .scaleInPlace(this.speedController.getSpeed() * dt + 0.5 * Player.acceleration * dt * dt)
+    } else {
+      this.moveVector.setAll(0)
+    }
   }
 
   private updateGroundDetection() {

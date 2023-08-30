@@ -3,7 +3,7 @@ import { Mesh, TransformNode } from "@babylonjs/core/Meshes"
 import { Scene } from "@babylonjs/core/scene"
 import { getMeshByName } from "../../utils/scene"
 import type { Bone } from "@babylonjs/core/Bones"
-import { Vector3 } from "@babylonjs/core/Maths";
+import { Vector3 } from "@babylonjs/core/Maths"
 
 export class Pistol implements Entity {
   public readonly mesh: Mesh
