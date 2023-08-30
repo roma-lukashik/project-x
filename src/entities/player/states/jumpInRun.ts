@@ -1,6 +1,6 @@
-import { State } from "../../../state/state"
+import type { State } from "../../../state/state"
 import { Player } from "../player"
-import { PlayerStateController } from "../controller"
+import type { PlayerStateController } from "../controller"
 
 export class JumpInRunState implements State {
   public constructor(

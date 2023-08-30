@@ -1,7 +1,7 @@
-import { State } from "../../../state/state"
+import type { State } from "../../../state/state"
 import { InputController, KeyboardKey, MovementKeys } from "../../../controllers/input"
 import { Player } from "../player"
-import { PlayerStateController } from "../controller"
+import type { PlayerStateController } from "../controller"
 
 export class IdleState implements State {
   public constructor(

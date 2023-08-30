@@ -1,5 +1,5 @@
 import type { Scene } from "@babylonjs/core/scene"
-import { AnimationGroup } from "@babylonjs/core/Animations"
+import type { AnimationGroup } from "@babylonjs/core/Animations"
 import type { Nullable } from "@babylonjs/core/types"
 import type { Observer } from "@babylonjs/core/Misc"
 import { WeightedAnimationGroup } from "./weightedAnimationGroup"

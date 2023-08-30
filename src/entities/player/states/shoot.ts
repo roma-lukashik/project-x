@@ -1,8 +1,8 @@
-import { State } from "../../../state/state"
-import { Player } from "../player"
+import type { State } from "../../../state/state"
+import type { Player } from "../player"
 import { Vector3 } from "@babylonjs/core/Maths"
-import { Scene } from "@babylonjs/core/scene"
-import { PlayerStateController } from "../controller"
+import type { Scene } from "@babylonjs/core/scene"
+import type { PlayerStateController } from "../controller"
 import { animate } from "../../../utils/animate"
 import type { DeepImmutable } from "@babylonjs/core/types"
 

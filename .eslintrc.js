@@ -45,6 +45,15 @@ module.exports = {
     "@typescript-eslint/explicit-member-accessibility": ["error", {
       "accessibility": "explicit",
     }],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        prefer: "type-imports",
+        disallowTypeAnnotations: false,
+        fixStyle: "inline-type-imports",
+      },
+    ],
+    "@typescript-eslint/no-import-type-side-effects": "error",
     "@typescript-eslint/member-ordering": [
       "error",
       {

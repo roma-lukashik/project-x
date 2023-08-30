@@ -1,6 +1,6 @@
 import { Engine } from "@babylonjs/core/Engines/engine"
 import { Scene } from "@babylonjs/core/scene"
-import { DirectionalLight, HemisphericLight, ShadowGenerator, ShadowLight } from "@babylonjs/core/Lights"
+import { DirectionalLight, HemisphericLight, ShadowGenerator, type ShadowLight } from "@babylonjs/core/Lights"
 import { Vector3 } from "@babylonjs/core/Maths"
 import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
 import { CreateBox, Mesh } from "@babylonjs/core/Meshes"

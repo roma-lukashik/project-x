@@ -1,7 +1,7 @@
-import { State } from "../../../state/state"
+import type { State } from "../../../state/state"
 import { Player } from "../player"
 import { InputController, KeyboardKey } from "../../../controllers/input"
-import { PlayerStateController } from "../controller"
+import type { PlayerStateController } from "../controller"
 import { Vector3 } from "@babylonjs/core/Maths"
 import { PointerInput } from "@babylonjs/core/DeviceInput"
 

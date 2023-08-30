@@ -1,11 +1,11 @@
 import type { Scene } from "@babylonjs/core/scene"
-import { TransformNode } from "@babylonjs/core/Meshes"
+import type { TransformNode } from "@babylonjs/core/Meshes"
 import { UniversalCamera } from "@babylonjs/core/Cameras"
 import { Scalar, Vector3 } from "@babylonjs/core/Maths"
 import { Tools } from "@babylonjs/core/Misc"
 import type { Nullable } from "@babylonjs/core/types"
-import { Disposable } from "../entities/entity"
-import { Engine } from "@babylonjs/core/Engines/engine"
+import type { Disposable } from "../entities/entity"
+import type { Engine } from "@babylonjs/core/Engines/engine"
 
 export class ThirdPersonCamera implements Disposable {
   private readonly camera: UniversalCamera

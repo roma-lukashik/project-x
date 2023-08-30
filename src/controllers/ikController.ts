@@ -1,7 +1,7 @@
-import { Scene } from "@babylonjs/core/scene"
-import { Bone, BoneIKController } from "@babylonjs/core/Bones"
-import { AbstractMesh, TransformNode } from "@babylonjs/core/Meshes"
-import { Disposable } from "../entities/entity"
+import type { Scene } from "@babylonjs/core/scene"
+import { type Bone, BoneIKController } from "@babylonjs/core/Bones"
+import { type AbstractMesh, TransformNode } from "@babylonjs/core/Meshes"
+import type { Disposable } from "../entities/entity"
 import { getBoneByName, getMeshByName } from "../utils/scene"
 
 export class IKController implements Disposable {

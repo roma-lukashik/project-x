@@ -3,7 +3,7 @@ import type { DeviceSourceType } from "@babylonjs/core/DeviceInput/internalDevic
 import type { Nullable } from "@babylonjs/core/types"
 import type { Scene } from "@babylonjs/core/scene"
 import type { Observer } from "@babylonjs/core/Misc"
-import { DeviceInput } from "@babylonjs/core/DeviceInput/InputDevices/deviceTypes"
+import type { DeviceInput } from "@babylonjs/core/DeviceInput/InputDevices/deviceTypes"
 
 export enum KeyboardKey {
   W = 87,

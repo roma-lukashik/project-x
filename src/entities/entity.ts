@@ -1,4 +1,4 @@
-import { Mesh } from "@babylonjs/core/Meshes"
+import type { Mesh } from "@babylonjs/core/Meshes"
 
 export interface Entity extends Disposable {
   mesh: Mesh
