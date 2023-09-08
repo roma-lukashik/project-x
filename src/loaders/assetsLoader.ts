@@ -5,10 +5,11 @@ import {
 import type { Scene } from "@babylonjs/core/scene"
 import "@babylonjs/loaders/glTF/2.0"
 
-interface AssetsBundle {
+export interface AssetsBundle {
   models?: AssetsMap
   animations?: AssetsMap
 }
+
 type AssetsMap = Record<AssetName, Path>
 type AssetName = string
 type Path = string

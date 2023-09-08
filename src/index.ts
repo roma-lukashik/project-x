@@ -11,30 +11,7 @@ import { Box } from "./entities/box/box"
 import { Terrain } from "./entities/terrain/terrain"
 import { Pistol } from "./entities/pistol/pistol"
 import { loadAssets } from "./loaders/assetsLoader"
-
-import playerModel from "./assets/player.gltf"
-import gunModel from "./assets/gun.gltf"
-import idle from "./assets/idle.gltf"
-import jumpInPlace from "./assets/jumpInPlace.gltf"
-import jumpInRun from "./assets/jumpInRun.gltf"
-import pistolIdle from "./assets/pistolIdle.gltf"
-import run from "./assets/run.gltf"
-import walk from "./assets/walk.gltf"
-
-const bundle = {
-  models: {
-    Player: playerModel,
-    Pistol: gunModel,
-  },
-  animations: {
-    Idle: idle,
-    JumpInPlace: jumpInPlace,
-    JumpInRun: jumpInRun,
-    PistolIdle: pistolIdle,
-    Run: run,
-    Walk: walk,
-  }
-}
+import { gameBundle } from "./bundle"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -54,7 +31,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   InputController.init(scene)
 
-  await loadAssets(scene, bundle)
+  await loadAssets(scene, gameBundle)
 
   createAmbientLight(scene)
   createSkybox(scene)
