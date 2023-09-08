@@ -28,7 +28,7 @@ export class Player implements Entity {
   private static readonly meshName = "__root__"
   private static readonly rightHandMeshName = "mixamorig:RightHand"
   private static readonly leftHandMeshName = "mixamorig:LeftHand"
-  private static readonly acceleration = 10
+  private static readonly acceleration = 12
   private static readonly gravity = -9.8
 
   public readonly mesh: Mesh

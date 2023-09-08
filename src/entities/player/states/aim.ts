@@ -25,6 +25,9 @@ export class AimState implements State {
   }
 
   public update(controller: PlayerStateController) {
+    this.player.rightHand.update()
+    this.player.leftHand.update()
+
     if (!InputController.getKey(KeyboardKey.Command)) {
       controller.change(controller.idle)
       return
@@ -35,7 +38,5 @@ export class AimState implements State {
       controller.change(controller.shoot)
       return
     }
-    this.player.rightHand.update()
-    this.player.leftHand.update()
   }
 }
