@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": ["node_modules"],
   "compilerOptions": {
@@ -23,7 +23,7 @@
     "importHelpers": false,
     "declaration": true,
     "typeRoots": [
-      "node_modules/@types",
+      "node_modules/@types"
     ],
     "target": "ES2017",
     "lib": [

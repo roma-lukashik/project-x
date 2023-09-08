@@ -2,16 +2,39 @@ import { Engine } from "@babylonjs/core/Engines/engine"
 import { Scene } from "@babylonjs/core/scene"
 import { DirectionalLight, HemisphericLight, ShadowGenerator, type ShadowLight } from "@babylonjs/core/Lights"
 import { Vector3 } from "@babylonjs/core/Maths"
-import { SceneLoader, SceneLoaderAnimationGroupLoadingMode } from "@babylonjs/core/Loading"
 import { CreateBox, Mesh } from "@babylonjs/core/Meshes"
 import { SkyMaterial } from "@babylonjs/materials/sky"
 import { Inspector } from "@babylonjs/inspector"
-import "@babylonjs/loaders/glTF/2.0"
 import { Player } from "./entities/player/player"
 import { InputController } from "./controllers/input"
 import { Box } from "./entities/box/box"
 import { Terrain } from "./entities/terrain/terrain"
 import { Pistol } from "./entities/pistol/pistol"
+import { loadAssets } from "./loaders/assetsLoader"
+
+import playerModel from "./assets/player.gltf"
+import gunModel from "./assets/gun.gltf"
+import idle from "./assets/idle.gltf"
+import jumpInPlace from "./assets/jumpInPlace.gltf"
+import jumpInRun from "./assets/jumpInRun.gltf"
+import pistolIdle from "./assets/pistolIdle.gltf"
+import run from "./assets/run.gltf"
+import walk from "./assets/walk.gltf"
+
+const bundle = {
+  models: {
+    Player: playerModel,
+    Pistol: gunModel,
+  },
+  animations: {
+    Idle: idle,
+    JumpInPlace: jumpInPlace,
+    JumpInRun: jumpInRun,
+    PistolIdle: pistolIdle,
+    Run: run,
+    Walk: walk,
+  }
+}
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -31,7 +54,7 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
 
   InputController.init(scene)
 
-  await loadMeshes(scene)
+  await loadAssets(scene, bundle)
 
   createAmbientLight(scene)
   createSkybox(scene)
@@ -67,26 +90,6 @@ function createSunLight(scene: Scene) {
   const light = new DirectionalLight("directionalLight", new Vector3(0, -10, -10).normalize(), scene)
   light.position = new Vector3(0, 10, 10)
   return light
-}
-
-async function loadMeshes(scene: Scene) {
-  await SceneLoader.ImportMeshAsync("", "/", "player.gltf", scene)
-  await SceneLoader.ImportMeshAsync("", "/", "gun.gltf", scene).then((result) => {
-    result.meshes[0].name = "Pistol"
-  })
-  await Promise.all([
-    loadAnimation(scene, "walk"),
-    loadAnimation(scene, "run"),
-    loadAnimation(scene, "jumpInPlace"),
-    loadAnimation(scene, "jumpInRun"),
-    loadAnimation(scene, "idle"),
-    loadAnimation(scene, "pistolIdle"),
-  ])
-}
-
-async function loadAnimation(scene: Scene, animation: string) {
-  const mode = SceneLoaderAnimationGroupLoadingMode.NoSync
-  return SceneLoader.ImportAnimationsAsync("", `${animation}.gltf`, scene, false, mode)
 }
 
 function initialiseShadow(light: ShadowLight) {

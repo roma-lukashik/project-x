@@ -14,6 +14,15 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.gltf$/,
+        loader: "file-loader",
+        options: {
+          emitFile: true,
+          outputPath: "assets",
+          name: "[name].[ext]",
+        },
+      },
     ],
   },
   devServer: {

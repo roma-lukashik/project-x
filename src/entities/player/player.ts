@@ -25,7 +25,7 @@ export class Player implements Entity {
   public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
   public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.6, 0.7, -1.5)
 
-  private static readonly meshName = "__root__"
+  private static readonly meshName = "Player"
   private static readonly rightHandMeshName = "mixamorig:RightHand"
   private static readonly leftHandMeshName = "mixamorig:LeftHand"
   private static readonly acceleration = 12
@@ -114,7 +114,7 @@ export class Player implements Entity {
     const { min, max } = player.getHierarchyBoundingVectors()
     const height = max.y - min.y
     const radius = 0.35
-    const mesh = CreateCapsule(this.name, { radius, height })
+    const mesh = CreateCapsule(this.name + "Collider", { radius, height })
     mesh.visibility = 0.0
     mesh.position.y = height / 2
     mesh.ellipsoid = new Vector3(radius, height / 2, radius)
