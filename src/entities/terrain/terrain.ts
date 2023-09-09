@@ -1,8 +1,10 @@
 import type { Entity } from "../entity"
-import { CreateGround, type Mesh } from "@babylonjs/core/Meshes"
+import { CreateGround } from "@babylonjs/core/Meshes/Builders/groundBuilder"
+import type { Mesh } from "@babylonjs/core/Meshes/mesh"
 import type { Scene } from "@babylonjs/core/scene"
-import { Color3, Vector3 } from "@babylonjs/core/Maths"
-import { StandardMaterial } from "@babylonjs/core/Materials"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
+import { Color3 } from "@babylonjs/core/Maths/math.color"
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial"
 
 export class Terrain implements Entity {
   public readonly mesh: Mesh

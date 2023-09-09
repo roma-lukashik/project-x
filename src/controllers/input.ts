@@ -1,8 +1,10 @@
-import { type DeviceSource, DeviceSourceManager, DeviceType } from "@babylonjs/core/DeviceInput"
+import { DeviceType } from "@babylonjs/core/DeviceInput/InputDevices/deviceEnums"
+import { DeviceSourceManager } from "@babylonjs/core/DeviceInput/InputDevices/deviceSourceManager"
+import type { DeviceSource } from "@babylonjs/core/DeviceInput/InputDevices/deviceSource"
 import type { DeviceSourceType } from "@babylonjs/core/DeviceInput/internalDeviceSourceManager"
 import type { Nullable } from "@babylonjs/core/types"
 import type { Scene } from "@babylonjs/core/scene"
-import type { Observer } from "@babylonjs/core/Misc"
+import type { Observer } from "@babylonjs/core/Misc/observable"
 import type { DeviceInput } from "@babylonjs/core/DeviceInput/InputDevices/deviceTypes"
 
 export enum KeyboardKey {

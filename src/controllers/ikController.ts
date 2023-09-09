@@ -1,6 +1,8 @@
 import type { Scene } from "@babylonjs/core/scene"
-import { type Bone, BoneIKController } from "@babylonjs/core/Bones"
-import { type AbstractMesh, TransformNode } from "@babylonjs/core/Meshes"
+import type { Bone } from "@babylonjs/core/Bones/bone"
+import { BoneIKController } from "@babylonjs/core/Bones/boneIKController"
+import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh"
+import { TransformNode } from "@babylonjs/core/Meshes/transformNode"
 import type { Disposable } from "../entities/entity"
 import { getBoneByName, getMeshByName } from "../utils/scene"
 

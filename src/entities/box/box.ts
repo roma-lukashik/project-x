@@ -1,4 +1,5 @@
-import { CreateBox, type Mesh } from "@babylonjs/core/Meshes"
+import type { Mesh } from "@babylonjs/core/Meshes/mesh"
+import { CreateBox } from "@babylonjs/core/Meshes/Builders/boxBuilder"
 import type { Scene } from "@babylonjs/core/scene"
 import type { Entity } from "../entity"
 

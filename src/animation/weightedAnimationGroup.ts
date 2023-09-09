@@ -1,4 +1,4 @@
-import type { AnimationGroup } from "@babylonjs/core/Animations"
+import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup"
 
 export class WeightedAnimationGroup {
   private weight = 0

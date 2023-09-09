@@ -1,5 +1,5 @@
 import type { Scene } from "@babylonjs/core/scene"
-import type { TransformNode } from "@babylonjs/core/Meshes"
+import type { TransformNode } from "@babylonjs/core/Meshes/transformNode"
 import { IKController } from "../../controllers/ikController"
 
 export class PlayerIKController extends IKController {

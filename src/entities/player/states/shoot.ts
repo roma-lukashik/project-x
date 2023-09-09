@@ -1,6 +1,6 @@
 import type { State } from "../../../state/state"
 import type { Player } from "../player"
-import { Vector3 } from "@babylonjs/core/Maths"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
 import type { Scene } from "@babylonjs/core/scene"
 import type { PlayerStateController } from "../controller"
 import { animate } from "../../../utils/animate"

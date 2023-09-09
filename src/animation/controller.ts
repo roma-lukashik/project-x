@@ -1,7 +1,7 @@
 import type { Scene } from "@babylonjs/core/scene"
-import type { AnimationGroup } from "@babylonjs/core/Animations"
+import type { AnimationGroup } from "@babylonjs/core/Animations/animationGroup"
 import type { Nullable } from "@babylonjs/core/types"
-import type { Observer } from "@babylonjs/core/Misc"
+import type { Observer } from "@babylonjs/core/Misc/observable"
 import { WeightedAnimationGroup } from "./weightedAnimationGroup"
 
 export class AnimationController {
@@ -55,7 +55,7 @@ export class AnimationController {
 
   private calculateWeight(animation: WeightedAnimationGroup) {
     const weight = animation.getWeight()
-    const s = this.animationsPool.size - 1
-    return animation === this.current ? Math.min(weight + this.step, 1) : Math.max(weight - this.step / s, 0)
+    const size = this.animationsPool.size - 1
+    return animation === this.current ? Math.min(weight + this.step, 1) : Math.max(weight - this.step / size, 0)
   }
 }

@@ -2,8 +2,8 @@ import type { State } from "../../../state/state"
 import { Player } from "../player"
 import { InputController, KeyboardKey } from "../../../controllers/input"
 import type { PlayerStateController } from "../controller"
-import { Vector3 } from "@babylonjs/core/Maths"
-import { PointerInput } from "@babylonjs/core/DeviceInput"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
+import { PointerInput } from "@babylonjs/core/DeviceInput/InputDevices/deviceEnums"
 
 export class AimState implements State {
   public constructor(

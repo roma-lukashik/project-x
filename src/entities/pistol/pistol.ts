@@ -1,9 +1,10 @@
 import type { Entity } from "../entity"
-import type { Mesh, TransformNode } from "@babylonjs/core/Meshes"
+import type { Mesh } from "@babylonjs/core/Meshes/mesh"
+import type { TransformNode } from "@babylonjs/core/Meshes/transformNode"
 import type { Scene } from "@babylonjs/core/scene"
 import { getMeshByName } from "../../utils/scene"
-import type { Bone } from "@babylonjs/core/Bones"
-import { Vector3 } from "@babylonjs/core/Maths"
+import type { Bone } from "@babylonjs/core/Bones/bone"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
 
 export class Pistol implements Entity {
   public readonly mesh: Mesh

@@ -1,6 +1,6 @@
 import type { Scene } from "@babylonjs/core/scene"
 import type { Nullable } from "@babylonjs/core/types"
-import type { Observer } from "@babylonjs/core/Misc"
+import type { Observer } from "@babylonjs/core/Misc/observable"
 
 export function animate(
   scene: Scene,

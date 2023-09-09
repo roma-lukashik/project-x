@@ -1,7 +1,7 @@
-import type { AbstractMesh } from "@babylonjs/core/Meshes"
+import type { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh"
 import type { Scene } from "@babylonjs/core/scene"
-import { Ray } from "@babylonjs/core/Culling"
-import { Vector3 } from "@babylonjs/core/Maths"
+import { Ray } from "@babylonjs/core/Culling/ray"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
 
 const ray = new Ray(Vector3.Zero(), Vector3.Down())
 
