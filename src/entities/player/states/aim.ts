@@ -33,8 +33,6 @@ export class AimState implements State {
       return
     }
     if (InputController.getMouseKey(PointerInput.LeftClick)) {
-      this.player.rightHand.update()
-      this.player.leftHand.update()
       controller.change(controller.shoot)
       return
     }
