@@ -4,7 +4,7 @@ import { IKController } from "../../controllers/ikController"
 
 export class PlayerIKController extends IKController {
   public constructor(
-    protected readonly scene: Scene,
+    scene: Scene,
     parent: TransformNode,
     boneName: string,
   ) {

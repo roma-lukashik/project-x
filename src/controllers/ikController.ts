@@ -11,11 +11,11 @@ export class IKController implements Disposable {
   public readonly poleTarget: TransformNode
   public readonly bone: Bone
 
-  protected readonly controller: BoneIKController
-  protected readonly mesh: AbstractMesh
+  private readonly controller: BoneIKController
+  private readonly mesh: AbstractMesh
 
   public constructor(
-    protected readonly scene: Scene,
+    scene: Scene,
     parent: TransformNode,
     meshName: string,
     boneName: string,
