@@ -13,7 +13,7 @@ export class IdleState implements State {
     this.player.idle()
     this.player.setSpeed(0)
     this.player.setFollowCamera(false)
-    this.player.camera.setPosition(Player.idleCameraPosition)
+    this.player.camera.position.copyFrom(Player.idleCameraPosition)
   }
 
   public onExit() {

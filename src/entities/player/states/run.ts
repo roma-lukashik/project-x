@@ -13,7 +13,7 @@ export class RunState implements State {
     this.player.run()
     this.player.setSpeed(Player.runningSpeed)
     this.player.setFollowCamera(true)
-    this.player.camera.setPosition(Player.runCameraPosition)
+    this.player.camera.position.copyFrom(Player.runCameraPosition)
   }
 
   public onExit() {

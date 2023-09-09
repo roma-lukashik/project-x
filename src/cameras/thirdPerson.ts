@@ -8,11 +8,12 @@ import type { Disposable } from "../entities/entity"
 import type { Engine } from "@babylonjs/core/Engines/engine"
 
 export class ThirdPersonCamera implements Disposable {
+  public readonly position: Vector3
+
   private readonly camera: UniversalCamera
   private readonly engine: Engine
   private readonly canvas: Nullable<HTMLCanvasElement>
   private readonly target: TransformNode
-  private readonly position: Vector3
   private readonly minY = -25
   private readonly maxY = 35
   private readonly cameraSpeed = 0.1
@@ -41,10 +42,6 @@ export class ThirdPersonCamera implements Disposable {
   public update() {
     this.updateFromInput()
     this.updateCameraPosition()
-  }
-
-  public setPosition(position: Vector3): void {
-    this.position.copyFrom(position)
   }
 
   public dispose(): void {

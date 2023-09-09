@@ -14,7 +14,7 @@ export class JumpInWalkState implements State {
     this.player.setSpeed(Player.walkingSpeed)
     this.player.setFollowCamera(false)
     this.player.setJumpSpeed(Player.jumpingSpeed)
-    this.player.camera.setPosition(Player.walkCameraPosition)
+    this.player.camera.position.copyFrom(Player.walkCameraPosition)
   }
 
   public onExit() {
