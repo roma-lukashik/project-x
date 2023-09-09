@@ -20,10 +20,10 @@ export class Player implements Entity {
   public static readonly walkingSpeed = 1.11
   public static readonly runningSpeed = Player.walkingSpeed * 4
   public static readonly jumpingSpeed = 4
-  public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.2)
-  public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
-  public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.7)
-  public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.6, 0.7, -1.5)
+  public static readonly idleCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.0)
+  public static readonly walkCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.2)
+  public static readonly runCameraPosition: DeepImmutable<Vector3> = new Vector3(0, 0.7, -2.4)
+  public static readonly aimingCameraPosition: DeepImmutable<Vector3> = new Vector3(0.6, 0.7, -1.2)
 
   private static readonly meshName = "Player"
   private static readonly rightHandMeshName = "mixamorig:RightHand"

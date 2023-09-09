@@ -20,9 +20,7 @@ export async function loadAssets(scene: Scene, assetsBundle: AssetsBundle): Prom
 }
 
 function loadMeshes(scene: Scene, meshesMap: AssetsMap) {
-  return Object.keys(meshesMap).map((name) => {
-    return loadMesh(scene, name, meshesMap[name])
-  })
+  return Object.keys(meshesMap).map((name) => loadMesh(scene, name, meshesMap[name]))
 }
 
 async function loadMesh(scene: Scene, meshName: string, path: string) {
@@ -33,8 +31,8 @@ async function loadMesh(scene: Scene, meshName: string, path: string) {
 }
 
 function splitPath(path: string): [url: string, name: string] {
-  const lastSeparator = path.lastIndexOf("/")
-  return [path.slice(0, lastSeparator + 1), path.slice(lastSeparator + 1)]
+  const lastSeparator = path.lastIndexOf("/") + 1
+  return [path.slice(0, lastSeparator), path.slice(lastSeparator)]
 }
 
 function loadAnimations(scene: Scene, animationsMap: AssetsMap) {
