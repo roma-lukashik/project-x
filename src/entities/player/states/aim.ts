@@ -16,7 +16,7 @@ export class AimState implements State {
     this.player.rightHand.poleTarget.position = new Vector3(0.4, -0.33, -0.67)
     this.player.leftHand.target.position = new Vector3(-0.7, 0, -0.3)
     this.player.leftHand.poleTarget.position = new Vector3(-2.5, 0, -1.7)
-    this.player.aiming()
+    this.player.aim()
     this.player.setFollowCamera(true)
     this.player.camera.position.copyFrom(Player.aimingCameraPosition)
   }

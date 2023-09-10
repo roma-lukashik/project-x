@@ -9,7 +9,7 @@ import type { DeepImmutable } from "@babylonjs/core/types"
 export class ShootState implements State {
   private static readonly shootDuration = 200
   private static readonly kickbackVector: DeepImmutable<Vector3> = new Vector3(0, -0.08, 0)
-  private static readonly kickbackCameraShake: DeepImmutable<Vector3> = new Vector3(0, 0.08, 0)
+  private static readonly kickbackCameraShake: DeepImmutable<Vector3> = new Vector3(0, 0.1, 0)
 
   private readonly rightHandStartPosition = Vector3.Zero()
   private readonly rightHandEndPosition = Vector3.Zero()

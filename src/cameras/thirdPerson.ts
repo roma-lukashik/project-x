@@ -6,13 +6,11 @@ import { Scalar } from "@babylonjs/core/Maths/math.scalar"
 import { Tools } from "@babylonjs/core/Misc/tools"
 import type { Nullable } from "@babylonjs/core/types"
 import type { Disposable } from "../entities/entity"
-import type { Engine } from "@babylonjs/core/Engines/engine"
 
 export class ThirdPersonCamera implements Disposable {
   public readonly position: Vector3
 
   private readonly camera: UniversalCamera
-  private readonly engine: Engine
   private readonly canvas: Nullable<HTMLCanvasElement>
   private readonly target: TransformNode
   private readonly minY = -25
@@ -34,8 +32,7 @@ export class ThirdPersonCamera implements Disposable {
     this.camera.inputs.clear()
     this.camera.parent = target
     this.target = target
-    this.engine = scene.getEngine()
-    this.canvas = this.engine.getRenderingCanvas()
+    this.canvas = scene.getEngine().getRenderingCanvas()
     this.position = this.camera.position
     this.setupPointerLock()
   }

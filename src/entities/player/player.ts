@@ -74,7 +74,7 @@ export class Player implements Entity {
     return this.runAnimationLoop(PlayerAnimation.Idle)
   }
 
-  public aiming(): WeightedAnimationGroup {
+  public aim(): WeightedAnimationGroup {
     return this.runAnimationLoop(PlayerAnimation.PistolIdle)
   }
 

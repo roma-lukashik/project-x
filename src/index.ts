@@ -17,6 +17,7 @@ import { Terrain } from "./entities/terrain/terrain"
 import { Pistol } from "./entities/pistol/pistol"
 import { loadAssets } from "./loaders/assetsLoader"
 import { gameBundle } from "./bundle"
+import { Aim } from "./entities/aim/aim"
 
 export function main(): void {
   initialiseScene(createCanvas())
@@ -52,6 +53,8 @@ async function initialiseScene(canvas: HTMLCanvasElement) {
     .addShadowCaster(gun.mesh)
 
   gun.attach(player.rightHand.bone, player.transformNode)
+
+  new Aim(scene)
 
   Inspector.Show(scene, {})
 
